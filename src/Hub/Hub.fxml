@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Hub.Hub">
+<AnchorPane prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Hub.Hub">
    <children>
-      <GridPane layoutX="41.0" layoutY="100.0" maxHeight="180.0" maxWidth="400.0" minHeight="90.0" minWidth="300.0" prefHeight="100.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+      <GridPane fx:id="hubGridPane" layoutX="41.0" layoutY="100.0" maxHeight="180.0" maxWidth="400.0" minHeight="90.0" minWidth="300.0" prefHeight="100.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -19,10 +16,10 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Canvas fx:id="GridCanvasPomodoro" height="100.0" width="100.0" />
-            <Canvas fx:id="GridCanvasDoToday" height="100.0" width="100.0" GridPane.columnIndex="1" />
-            <Canvas fx:id="GridCanvasOfficeOverview" height="100.0" width="100.0" GridPane.columnIndex="2" />
-            <Canvas fx:id="GridCanvasAdmin" height="100.0" width="100.0" GridPane.columnIndex="3" />
+            <Canvas fx:id="GridCanvasPomodoro" height="100.0" onMouseClicked="#startPomodoro" width="100.0" />
+            <Canvas fx:id="GridCanvasDoToday" height="100.0" onMouseClicked="#startDoToday" width="100.0" GridPane.columnIndex="1" />
+            <Canvas fx:id="GridCanvasOfficeOverview" height="100.0" onMouseClicked="#startOfficeOverview" width="100.0" GridPane.columnIndex="2" />
+            <Canvas fx:id="GridCanvasAdmin" height="100.0" onMouseClicked="#startAdmin" width="100.0" GridPane.columnIndex="3" />
          </children>
       </GridPane>
    </children>
