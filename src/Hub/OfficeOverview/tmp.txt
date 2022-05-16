@@ -1,0 +1,1 @@
+OfficeView displays the chosen office's workers' status' and allows the HR or other superiors to check who is busy and who is on a break
