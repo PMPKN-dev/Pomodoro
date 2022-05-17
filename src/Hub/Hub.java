@@ -27,6 +27,8 @@ public class Hub extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Hub/Hub.fxml"));
         Parent parent = fxmlLoader.load();
         Scene scene = new Scene(parent,400,200);
+        primaryStage.setResizable(false);
+        scene.getStylesheets().add(super.getClass().getResource("/Hub/Style.css").toExternalForm());
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Hub");
@@ -41,6 +43,7 @@ public class Hub extends Application {
     @FXML
     public void startPomodoro(){
         //load Pomodoro into popup
+
     }
 
     @FXML
@@ -56,6 +59,21 @@ public class Hub extends Application {
     @FXML
     public void startAdmin(){
         //load Admin into popup
+        //GridCanvasAdmin.getClass().getResource("/Hub/Admin/View/Admin.fxml"); - Tried to be fancy, doesnt work
+        //Basically when Admin Canvas is clicked, the admin fxml will be launched
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Hub/Admin/View/Admin.fxml"));
+            Parent root = fxmlLoader.load();
+            Stage primaryStage = new Stage();
+            primaryStage.setTitle("Administrator");
+            primaryStage.setScene(new Scene(root));
+            //Scene scene = new Scene(root,400,400); - To be used if not using new Stage
+            primaryStage.show();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+
     }
 
 }
