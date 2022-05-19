@@ -1,77 +1,56 @@
 package Hub.Hub.Controller;
 
-import javafx.application.*;
-import javafx.fxml.*;
+import Hub.Admin.Controller.Admin;
+import Hub.DoToday.Controller.DoToday;
+import Hub.OfficeOverview.Controller.OfficeOverview;
+import Hub.Foundation.*;
+import Hub.Pomodoro.Controller.Pomodoro;
 import javafx.scene.*;
-import javafx.scene.canvas.*;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
-public class Hub extends Application {
-
-    @FXML
-    Canvas GridCanvasPomodoro;
-    @FXML
-    Canvas GridCanvasDoToday;
-    @FXML
-    Canvas GridCanvasOfficeOverview;
-    @FXML
-    Canvas GridCanvasAdmin;
-    @FXML
-    GridPane hubGridPane;
-
+public class Hub extends Program {
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Hub/Hub/View/Hub.fxml"));
-        Parent parent = fxmlLoader.load();
-        Scene scene = new Scene(parent,400,200);
-        primaryStage.setResizable(false);
-        scene.getStylesheets().add(super.getClass().getResource("/Hub/Resources/Style.css").toExternalForm());
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Hub");
-        primaryStage.show();
-
-
-
-        //TODO, make the 4 grids render icons for the programs and add onClick launching for the programs
-        //TODO, (will require popups to run the fxml files of the other programs)
+    public void expand() {
+        Button button = new Button();
+        FXControls.setButton(button,10,10,"Admin");
+        button.setOnAction(event -> startAdmin());
+        getUiRoot().getChildren().add(button);
     }
 
-    @FXML
     public void startPomodoro(){
-        //load Pomodoro into popup
-
+        Pomodoro pomodoro = new Pomodoro();
+        launchPackage("Pomodoro",pomodoro);
     }
 
-    @FXML
+
     public void startDoToday(){
-        //load DoToday into popup
+        DoToday doToday = new DoToday();
+        launchPackage("DoToday",doToday);
     }
 
-    @FXML
+
     public void startOfficeOverview(){
-        //load OfficeOverview into popup
+        OfficeOverview officeOverview = new OfficeOverview();
+        launchPackage("OfficeOverview",officeOverview);
     }
 
-    @FXML
+
     public void startAdmin(){
-        //load Admin into popup
-        //GridCanvasAdmin.getClass().getResource("/Hub/Admin/View/Admin.fxml"); - Tried to be fancy, doesnt work
-        //Basically when Admin Canvas is clicked, the admin fxml will be launched
-        try{
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Hub/Admin/View/Admin.fxml"));
-            Parent root = fxmlLoader.load();
-            Stage primaryStage = new Stage();
-            primaryStage.setTitle("Administrator");
-            primaryStage.setScene(new Scene(root));
-            //Scene scene = new Scene(root,400,400); - To be used if not using new Stage
-            primaryStage.show();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        Admin admin = new Admin();
+        launchPackage("Admin",admin);
+    }
 
 
+    //Lanches a package with the given name and program
+    private void launchPackage(String title, Program program){
+        AnchorPane ap = program.getUiRoot();
+        Scene scene = new Scene(ap,getUiRoot().getHeight(),getUiRoot().getWidth());
+        Stage stage = new Stage();
+        stage.setTitle(title);
+        stage.setScene(scene);
+        stage.show();
     }
 
 }

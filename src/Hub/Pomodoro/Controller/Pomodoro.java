@@ -1,4 +1,6 @@
 package Hub.Pomodoro.Controller;
 
-public class Pomodoro{
+import Hub.Foundation.Program;
+
+public class Pomodoro extends Program {
 }

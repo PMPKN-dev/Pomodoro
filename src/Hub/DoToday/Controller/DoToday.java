@@ -1,4 +1,6 @@
 package Hub.DoToday.Controller;
 
-public class DoToday {
+import Hub.Foundation.Program;
+
+public class DoToday extends Program {
 }

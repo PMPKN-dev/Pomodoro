@@ -1,4 +1,7 @@
 package Hub.OfficeOverview.Controller;
 
-public class OfficeOverview {
+import Hub.Foundation.Program;
+
+public class OfficeOverview extends Program {
+
 }

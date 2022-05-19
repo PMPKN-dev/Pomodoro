@@ -1,10 +1,9 @@
 package Hub.Admin.Controller;
 
-import Hub.Foundation.FXControls;
-import Hub.Foundation.program;
+import Hub.Foundation.*;
 import javafx.scene.text.Text;
 
-public class Admin extends program {
+public class Admin extends Program {
 
     @Override
     public void expand(){

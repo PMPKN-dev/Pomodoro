@@ -1,23 +1,20 @@
 package Hub.Foundation;
 
 import javafx.application.*;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.*;
+import javafx.event.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.*;
 
-import java.io.IOException;
 import java.util.Objects;
 
 /**
  * A custom template for an Application that allows us to have the same layout and design on basic things like exit buttons
  * or other displays across all the controllers with ease
  */
-public class program extends Application {
+public class Program extends Application {
 
     Group defaults = new Group();
     AnchorPane uiRoot = new AnchorPane();
@@ -51,12 +48,13 @@ public class program extends Application {
         primaryStage.show();
     }
 
-
     /**
      * Override this to add code to the Controller
      */
     public void expand(){
-
+        Text text = new Text();
+        FXControls.setPosition(text,100,100);
+        text.setText("Looks like you did not @Override the expand() method");
     }
 
 
