@@ -29,7 +29,10 @@ public class Program extends Application {
 
         Button exit = new Button();
         FXControls.setButton(exit,100,100,"exit");
-        EventHandler<ActionEvent> handler = event -> Platform.exit();
+        EventHandler<ActionEvent> handler = event -> {
+            Stage stage = (Stage) getUiRoot().getScene().getWindow();
+            stage.close();
+        };
         exit.setOnAction(handler);
 
         defaults.getChildren().addAll(exit);
