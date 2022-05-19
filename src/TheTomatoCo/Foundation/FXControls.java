@@ -10,15 +10,9 @@ public class FXControls {
         node.setLayoutX(x);
     }
 
-    public static void setPosition(Button button, int x, int y){
-        button.setLayoutY(y);
-        button.setLayoutX(x);
-    }
-
     public static void setButton(Button button, int x, int y, String text){
         setPosition(button,x,y);
         button.setText(text);
-
     }
 
 }
