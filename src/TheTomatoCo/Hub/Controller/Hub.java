@@ -1,10 +1,10 @@
-package Hub.Hub.Controller;
+package TheTomatoCo.Hub.Controller;
 
-import Hub.Admin.Controller.Admin;
-import Hub.DoToday.Controller.DoToday;
-import Hub.OfficeOverview.Controller.OfficeOverview;
-import Hub.Foundation.*;
-import Hub.Pomodoro.Controller.Pomodoro;
+import TheTomatoCo.Admin.Controller.Admin;
+import TheTomatoCo.DoToday.Controller.DoToday;
+import TheTomatoCo.OfficeOverview.Controller.OfficeOverview;
+import TheTomatoCo.Foundation.*;
+import TheTomatoCo.Pomodoro.Controller.Pomodoro;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;

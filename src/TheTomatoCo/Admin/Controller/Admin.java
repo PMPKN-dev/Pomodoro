@@ -1,6 +1,6 @@
-package Hub.Admin.Controller;
+package TheTomatoCo.Admin.Controller;
 
-import Hub.Foundation.*;
+import TheTomatoCo.Foundation.*;
 import javafx.scene.text.Text;
 
 public class Admin extends Program {

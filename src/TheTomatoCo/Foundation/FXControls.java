@@ -1,4 +1,4 @@
-package Hub.Foundation;
+package TheTomatoCo.Foundation;
 
 import javafx.scene.*;
 import javafx.scene.control.*;

@@ -1,4 +1,4 @@
-package Hub.Foundation;
+package TheTomatoCo.Foundation;
 
 import javafx.application.*;
 import javafx.event.*;
@@ -25,7 +25,7 @@ public class Program extends Application {
 
 
     private void aProgramInitialize(Scene scene){
-        scene.getStylesheets().add(Objects.requireNonNull(super.getClass().getResource("/Hub/Resources/Style.css")).toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(super.getClass().getResource("/TheTomatoCo/Resources/Style.css")).toExternalForm());
 
         Button exit = new Button();
         FXControls.setButton(exit,100,100,"exit");

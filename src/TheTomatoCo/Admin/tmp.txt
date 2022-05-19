@@ -1,0 +1,1 @@
+TheTomatoCo.Admin adds and removes users by accessing the database and is the only one capable of writing and deleting from the DB
