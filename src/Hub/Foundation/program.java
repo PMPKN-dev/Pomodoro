@@ -1,6 +1,8 @@
 package Hub.Foundation;
 
 import javafx.application.*;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -9,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.*;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * A custom template for an Application that allows us to have the same layout and design on basic things like exit buttons
@@ -17,24 +20,27 @@ import java.io.IOException;
 public class program extends Application {
 
     Group defaults = new Group();
+    AnchorPane uiRoot = new AnchorPane();
+
+    public AnchorPane getUiRoot (){
+        return uiRoot;
+    }
 
 
-    /**
-     * Instantiates the default Nodes and StyleSheet
-     * @param scene The scene you are loading, which you want to apply the StyleSheet to
-     */
     private void aProgramInitialize(Scene scene){
-        scene.getStylesheets().add(super.getClass().getResource("/Hub/Resources/Style.css").toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(super.getClass().getResource("/Hub/Resources/Style.css")).toExternalForm());
 
         Button exit = new Button();
         FXControls.setButton(exit,100,100,"exit");
+        EventHandler<ActionEvent> handler = event -> Platform.exit();
+        exit.setOnAction(handler);
 
         defaults.getChildren().addAll(exit);
     }
 
 
-    public void start(Stage primaryStage) throws Exception {
-        AnchorPane uiRoot = new AnchorPane();
+    public void start(Stage primaryStage) {
+        uiRoot = new AnchorPane();
         uiRoot.getChildren().addAll(defaults);
         Scene scene = new Scene(uiRoot, 600, 400);
         primaryStage.setResizable(false);
@@ -47,7 +53,7 @@ public class program extends Application {
 
 
     /**
-     * Override this to add code
+     * Override this to add code to the Controller
      */
     public void expand(){
 
