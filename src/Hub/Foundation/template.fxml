@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Hub.Foundation.program">
+   <children>
+      <Text layoutX="72.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This Template fxml is loaded whenever you do not Override the default start method" />
+      <Text layoutX="72.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inside of a class that impleents aProgram.java" />
+      <Text layoutX="72.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To fix this create a new Start() Method according to JavaFX standards and Annotate it " />
+      <Text layoutX="72.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="with a @Override to run your own fxml file and make it run " />
+      <Text layoutX="75.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="aProgramInitialize() to get the default layout" />
+   </children>
+</AnchorPane>

@@ -1,4 +1,7 @@
 package Hub.Admin.Controller;
 
-public class Admin {
+import Hub.Foundation.program;
+
+public class Admin extends program {
+
 }
