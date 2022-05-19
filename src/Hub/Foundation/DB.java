@@ -1,4 +1,4 @@
-package Hub;
+package Hub.Foundation;
 
 import java.sql.*;
 

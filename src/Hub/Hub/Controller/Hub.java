@@ -1,11 +1,9 @@
-package Hub;
+package Hub.Hub.Controller;
 
 import javafx.application.*;
-import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.canvas.*;
-import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
@@ -24,11 +22,11 @@ public class Hub extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Hub/Hub.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Hub/Hub/View/Hub.fxml"));
         Parent parent = fxmlLoader.load();
         Scene scene = new Scene(parent,400,200);
         primaryStage.setResizable(false);
-        scene.getStylesheets().add(super.getClass().getResource("/Hub/Style.css").toExternalForm());
+        scene.getStylesheets().add(super.getClass().getResource("/Hub/Resources/Style.css").toExternalForm());
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Hub");
