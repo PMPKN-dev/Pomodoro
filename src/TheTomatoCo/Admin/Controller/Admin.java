@@ -1,17 +1,64 @@
 package TheTomatoCo.Admin.Controller;
 
 import TheTomatoCo.Foundation.*;
+import javafx.scene.*;
+import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 
 public class Admin extends Program {
 
+    Group initial = new Group();
+    Group createConsultantGroup = new Group();
+
     @Override
     public void expand(){
-        Text test = new Text();
-        FXControls.setPosition(test,50,50);
-        test.setText("this is a test text for this purpose");
 
 
-        getUiRoot().getChildren().add(test);
+        setUpInitial();
+        setUpCreateConsultant();
+        //getUiRoot().getChildren().addAll(initial);
+
+
+    }
+
+    private void setUpInitial(){
+        Text text = new Text();
+        FXControls.setPosition(text,60,60);
+        text.setText("this text is the initial display in this window");
+
+        initial.getChildren().add(text);
+
+        Button createConsultant = new Button();
+        FXControls.setButton(createConsultant,100,100,"Create Consultant");
+        createConsultant.setOnAction(event -> changeGroup(initial,createConsultantGroup));
+
+        initial.getChildren().add(createConsultant);
+
+
+        getUiRoot().getChildren().add(initial);
+    }
+
+    private void setUpCreateConsultant(){
+        Button back = new Button();
+        FXControls.setButton(back,20,20,"back");
+        back.setOnAction(event -> returnToInitial(createConsultantGroup));
+        createConsultantGroup.getChildren().add(back);
+    }
+
+    private void changeGroup(Group currentGroup, Group targetGroup){
+        removeGroup(currentGroup);
+        loadGroup(targetGroup);
+    }
+
+    private void returnToInitial(Group currentGroup){
+        changeGroup(currentGroup,initial);
+    }
+
+    private void removeGroup(Group group){
+        getUiRoot().getChildren().removeAll(group);
+    }
+
+    private void loadGroup(Group group){
+        getUiRoot().getChildren().addAll(group);
     }
 }

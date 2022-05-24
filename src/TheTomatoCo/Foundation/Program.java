@@ -12,7 +12,9 @@ import java.util.Objects;
 
 /**
  * A custom template for an Application that allows us to have the same layout and design on basic things like exit buttons
- * or other displays across all the controllers with ease
+ * or other displays across all the controllers with ease.
+ * <p>This class, by all means, functions as an abstract for our controllers with the difference that it is not marked as such due to
+ * technical limitations which prevent it from working the way we intend when abstract
  */
 public class Program extends Application {
 
@@ -28,7 +30,7 @@ public class Program extends Application {
         scene.getStylesheets().add(Objects.requireNonNull(super.getClass().getResource("/TheTomatoCo/Resources/Style.css")).toExternalForm());
 
         Button exit = new Button();
-        FXControls.setButton(exit,100,100,"exit");
+        FXControls.setButton(exit,300,350,"exit");
         EventHandler<ActionEvent> handler = event -> {
             Stage stage = (Stage) getUiRoot().getScene().getWindow();
             stage.close();
@@ -56,9 +58,8 @@ public class Program extends Application {
      */
     public void expand(){
         Text text = new Text();
-        FXControls.setPosition(text,100,100);
+        FXControls.setPosition(text,100,90);
         text.setText("Looks like you did not @Override the expand() method");
+        defaults.getChildren().add(text);
     }
-
-
 }
