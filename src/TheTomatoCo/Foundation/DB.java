@@ -14,7 +14,7 @@ public class DB {
     public static Connection getCon(){
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=CamperDB", "sa", "1234");
+            con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=dbPomodoro", "sa", "1234");
         }
         catch (Exception e){
             e.printStackTrace();
