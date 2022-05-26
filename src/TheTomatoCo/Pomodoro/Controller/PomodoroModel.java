@@ -40,6 +40,6 @@ public class PomodoroModel {
                     //TODO: insert the binding for the labels for breaks and pausing/starting timer
                 });
             }
-        },0,1000);
+        },0,1000); //otherwise runLater doesnt work
     }
 }
