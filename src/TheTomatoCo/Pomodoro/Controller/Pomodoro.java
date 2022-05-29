@@ -2,6 +2,7 @@ package TheTomatoCo.Pomodoro.Controller;
 
 import TheTomatoCo.Foundation.FXControls;
 import TheTomatoCo.Foundation.Program;
+import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
@@ -29,17 +30,18 @@ public class Pomodoro extends Program {
     Group initialScreen = new Group();
     Group pomodoroScreen = new Group();
 
+
     @Override
     public void expand(){
         initialScreen();
-        //PomodoroModel dot = new PomodoroModel("25:00","do"); //TODO grab Labels from settings
-        //pomodoroScreen();
+        pomodoroSetup();
+
     }
 
 
-    @Override
+    /*
+    //@Override
     public void start(Stage stage){
-        initialScreen();
         PomodoroView pomodoroView = new PomodoroView();
         PomodoroModel pomodoroModel = new PomodoroModel(pomodoroView.getTimerLabel(),pomodoroView.getWhatsNextTODO());
         new PomodoroController(pomodoroModel,pomodoroView);
@@ -47,15 +49,34 @@ public class Pomodoro extends Program {
         stage.setScene(pomodoroView.getScene());
         stage.show();
     }
-
-
+     */
     private void initialScreen(){
         Text text = new Text();
         FXControls.setPosition(text,40,60);
         text.setText("Welcome to Pomodoro");
         //TODO: Insert login here and make it appear before the timer through group-changing
+        //Login with ID and Pass
+        //TODO: Make it check if ID and Pass matches in database
+        //TODO: Have it refuse to enter Pomodoro if login does not match
 
-        initialScreen.getChildren().add(text);
+        TextField id = new TextField();
+        TextField pass = new TextField();
+        id.setPromptText("Enter ID");
+        id.setLayoutX(200);
+        id.setLayoutY(200);
+        pass.setPromptText("Enter Password");
+        pass.setLayoutX(200);
+        pass.setLayoutY(250);
+
+        if(id.getText().equals("Call statement to check ID") && pass.getText().equals("Call statement to check Pass")){
+            //enter pomodoro
+        }else{
+            //TODO: prevent entering
+            id.setText("");
+            pass.setText("");
+        }
+
+        initialScreen.getChildren().addAll(text,id,pass);
 
         //change view
         Button enterPomodoro = new Button();
@@ -65,23 +86,36 @@ public class Pomodoro extends Program {
         getUiRoot().getChildren().add(initialScreen);
     }
 
-    /*
     private void pomodoroSetup(){
-
         //Cancel button
         Button cancel = new Button();
-        FXControls.setButton(cancel,20,20,"Cancel");
+        FXControls.setButton(cancel,450,20,"Cancel");
+        cancel.setAlignment(Pos.BOTTOM_CENTER);
         cancel.setOnAction(event -> returnToInitial(pomodoroScreen));
         pomodoroScreen.getChildren().add(cancel);
 
-        //Label configuration
+        //TODO: make this work, it currently wont show up, addChildren wont work
+        PomodoroView pomodoroView = new PomodoroView();
+        PomodoroModel pomodoroModel = new PomodoroModel(pomodoroView.getTimerLabel(),pomodoroView.getWhatsNextTODO());
+        PomodoroController con = new PomodoroController(pomodoroModel,pomodoroView);
+        //pomodoroScreen.getChildren().add(pomodoroView);
+
+
+
+
+
+
+
+
+        /*
+        Label configuration
         timerLabel.setLayoutX(250);
         timerLabel.setLayoutY(100);
         timerLabel.setText(timeSeconds.toString());
         timerLabel.setTextFill(Color.RED);
         timerLabel.setStyle("-fx-font-size: 4em");
         timerLabel.textProperty().bind(timeSeconds.asString()); //timerLabel shows current value of timeSeconds
-        //Binding: whenever the value of timeSeconds changes, the timerLabel text also changes
+        Binding: whenever the value of timeSeconds changes, the timerLabel text also changes
         pomodoroScreen.getChildren().add(timerLabel);
 
         //button
@@ -93,14 +127,17 @@ public class Pomodoro extends Program {
             if(timeline != null){
                 timeline.stop();
             }
-           
+
+
 
         });
         pomodoroScreen.getChildren().add(startButton);
 
+
+         */
     }
 
-     */
+
 
 
 
