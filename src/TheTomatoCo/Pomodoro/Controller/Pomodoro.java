@@ -8,10 +8,17 @@ import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Pomodoro extends Program {
 
+    /**
+     * Step 1: Have a default label with 25:00 for pomodoro, 5:00 for short break and 10:00 for long break
+     * Step 2: Create individual logins for each consultant that have their data saved in database for next usage
+     * Step 3: Setup binding so that if in settings you change min:sec, it updates automatically for that particular user
+     * Step 4: Option for sounds when timer runs out
+     */
 
 
 
@@ -25,10 +32,24 @@ public class Pomodoro extends Program {
     Group initialScreen = new Group();
     Group pomodoroScreen = new Group();
 
-    @Override
+    /*
     public void expand(){
         initialScreen();
-        pomodoroSetup();
+        //PomodoroModel dot = new PomodoroModel("25:00","do"); //TODO grab Labels from settings
+        pomodoroScreen();
+    }
+
+     */
+
+    @Override
+    public void start(Stage stage){
+        PomodoroView pomodoroView = new PomodoroView();
+        PomodoroModel pomodoroModel = new PomodoroModel(pomodoroView.getTimerLabel(),pomodoroView.getWhatsNextTODO());
+        new PomodoroController(pomodoroModel,pomodoroView);
+        //pomodoroScreen.getChildren().add(pomodoroView);
+        stage.setTitle("Wonder if it works");
+        stage.setScene(pomodoroView.getScene());
+        stage.show();
     }
 
     /*
@@ -54,6 +75,7 @@ public class Pomodoro extends Program {
         getUiRoot().getChildren().add(initialScreen);
     }
 
+    /*
     private void pomodoroSetup(){
 
         //Cancel button
@@ -95,6 +117,8 @@ public class Pomodoro extends Program {
         pomodoroScreen.getChildren().add(startButton);
 
     }
+
+     */
 
 
 
