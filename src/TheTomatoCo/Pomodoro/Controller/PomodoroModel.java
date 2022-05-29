@@ -12,7 +12,7 @@ public class PomodoroModel {
     private Timer timer = new Timer();
     private final Label timerLabel, whatsNextTODO;
     private int seconds, minutes = 0;
-    private int counter = 60 * 25; //placeholder
+    private int counter = 60 * 25; //placeholder 25min
 
     public PomodoroModel(Label timerLabel, Label whatsNextTODO){
         this.timerLabel = timerLabel;

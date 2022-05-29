@@ -2,68 +2,58 @@ package TheTomatoCo.Pomodoro.Controller;
 
 import TheTomatoCo.Foundation.FXControls;
 import TheTomatoCo.Foundation.Program;
-import javafx.animation.*;
-import javafx.beans.property.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class Pomodoro extends Program {
 
     /**
-     * Step 1: Have a default label with 25:00 for pomodoro, 5:00 for short break and 10:00 for long break
-     * Step 2: Create individual logins for each consultant that have their data saved in database for next usage
-     * Step 3: Setup binding so that if in settings you change min:sec, it updates automatically for that particular user
-     * Step 4: Option for sounds when timer runs out
+     * DONE - Step 1: Have a default label with 25:00 for pomodoro, 5:00 for short break and 10:00 for long break
+     * TODO: Step 2: Create individual logins for each consultant that have their data saved in database for next usage
+     * TODO: Step 3: Setup binding so that if in settings you change min:sec, it updates automatically for that particular user
+     * TODO: Step 4: Option for sounds when timer runs out
+     * TODO: Step 5: Figure out how the heck Group-changing works, because it would make the code more smooth
      */
 
 
 
     //private class constant and variables
-    private static final Integer startTime = 15; //Placeholder until I figure out min:sec
+    //private static final Integer startTime = 15; //Placeholder until I figure out min:sec
     //TODO: create a binding to a Label that updates the Label text as the chosen Min:sec
     //TODO: make the chosen Min:Sec part of what user can edit
-    private Timeline timeline;
-    private final Label timerLabel = new Label();
-    private final IntegerProperty timeSeconds = new SimpleIntegerProperty(startTime); //sets up binding
+    //private Timeline timeline;
+    //private final Label timerLabel = new Label();
+    //private final IntegerProperty timeSeconds = new SimpleIntegerProperty(startTime); //sets up binding
     Group initialScreen = new Group();
     Group pomodoroScreen = new Group();
 
-    /*
+    @Override
     public void expand(){
         initialScreen();
         //PomodoroModel dot = new PomodoroModel("25:00","do"); //TODO grab Labels from settings
-        pomodoroScreen();
+        //pomodoroScreen();
     }
 
-     */
 
     @Override
     public void start(Stage stage){
+        initialScreen();
         PomodoroView pomodoroView = new PomodoroView();
         PomodoroModel pomodoroModel = new PomodoroModel(pomodoroView.getTimerLabel(),pomodoroView.getWhatsNextTODO());
         new PomodoroController(pomodoroModel,pomodoroView);
-        //pomodoroScreen.getChildren().add(pomodoroView);
         stage.setTitle("Wonder if it works");
         stage.setScene(pomodoroView.getScene());
         stage.show();
     }
 
-    /*
-    public static void main(String[] args) {
-        Program.launch(args);
-    }
-
-     */
 
     private void initialScreen(){
         Text text = new Text();
         FXControls.setPosition(text,40,60);
         text.setText("Welcome to Pomodoro");
-        //TODO: Insert login here
+        //TODO: Insert login here and make it appear before the timer through group-changing
 
         initialScreen.getChildren().add(text);
 
@@ -103,15 +93,7 @@ public class Pomodoro extends Program {
             if(timeline != null){
                 timeline.stop();
             }
-            //sets the chosen time as the starting time
-            //TODO: make it work with minutes too
-            timeSeconds.set(startTime);
-            timeline = new Timeline();
-            //sets duration of timeline/counter to startTime and makes 0 the final possible value
-            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(startTime+1),new KeyValue(timeSeconds,0)));
-            timeline.playFromStart();
-            //When you click start button it starts again. This is placeholder until breaks are added
-            //TODO: Add breaks
+           
 
         });
         pomodoroScreen.getChildren().add(startButton);

@@ -2,7 +2,7 @@ package TheTomatoCo.Pomodoro.Controller;
 
 public class PomodoroController {
     public PomodoroController(PomodoroModel pomodoroModel, PomodoroView pomodoroView){
-        pomodoroView.getStartPauseButton().setOnAction((e) -> {
+        pomodoroView.getStartPauseButton().setOnAction((event) -> {
             if(pomodoroModel.isRunning()){
                 pomodoroModel.pauseTimer();
                 pomodoroModel.setRunning(false);
