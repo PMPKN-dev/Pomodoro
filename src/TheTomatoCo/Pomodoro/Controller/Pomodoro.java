@@ -1,5 +1,6 @@
 package TheTomatoCo.Pomodoro.Controller;
 
+import TheTomatoCo.Foundation.DB;
 import TheTomatoCo.Foundation.FXControls;
 import TheTomatoCo.Foundation.Program;
 import javafx.geometry.Pos;
@@ -7,6 +8,11 @@ import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Logger;
 
 public class Pomodoro extends Program {
 
@@ -50,13 +56,16 @@ public class Pomodoro extends Program {
         stage.show();
     }
      */
+
+
     private void initialScreen(){
+
         Text text = new Text();
         FXControls.setPosition(text,40,60);
         text.setText("Welcome to Pomodoro");
         //TODO: Insert login here and make it appear before the timer through group-changing
         //Login with ID and Pass
-        //TODO: Make it check if ID and Pass matches in database
+        //TODO: Make it check if ID and Pass matches in database - DONE
         //TODO: Have it refuse to enter Pomodoro if login does not match
 
         TextField id = new TextField();
@@ -68,13 +77,30 @@ public class Pomodoro extends Program {
         pass.setLayoutX(200);
         pass.setLayoutY(250);
 
-        if(id.getText().equals("Call statement to check ID") && pass.getText().equals("Call statement to check Pass")){
-            //enter pomodoro
-        }else{
-            //TODO: prevent entering
-            id.setText("");
-            pass.setText("");
+        PreparedStatement ps;
+        ResultSet rs;
+        String userName = id.getText();
+        String password = pass.getText();
+
+        String query = "SELECT * FROM Users WHERE userName=? AND userPass=?"; //DB not created yet, values may change
+
+        try{
+            ps = DB.getCon().prepareStatement(query);
+            ps.setString(1,userName);
+            ps.setString(2,password);
+            rs = ps.executeQuery();
+
+            if(rs.next()){
+                //enter pomodoro
+            }else{
+                //TODO: prevent entering
+                id.setText("");
+                pass.setText("");
+            }
+
+        }catch(SQLException ex){
         }
+
 
         initialScreen.getChildren().addAll(text,id,pass);
 
