@@ -58,6 +58,9 @@ public class Pomodoro extends Program {
      */
 
 
+    /*fixme Login is in the completely wrong spot. we have to prompt login before hub not before pomodoro
+    todo; move login to a separate controller
+     */
     private void initialScreen(){
 
         Text text = new Text();
@@ -121,6 +124,9 @@ public class Pomodoro extends Program {
         pomodoroScreen.getChildren().add(cancel);
 
         //TODO: make this work, it currently wont show up, addChildren wont work
+        /*Fixme it doesn't work because PomodoroView is not a Node. I can't say about the PomodoroModel but
+            it will be easier to implement the Nodes from PomodoroView inside of this class instead.
+         */
         PomodoroView pomodoroView = new PomodoroView();
         PomodoroModel pomodoroModel = new PomodoroModel(pomodoroView.getTimerLabel(),pomodoroView.getWhatsNextTODO());
         PomodoroController con = new PomodoroController(pomodoroModel,pomodoroView);

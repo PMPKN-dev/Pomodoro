@@ -45,6 +45,7 @@ public class Admin extends Program {
     }
 
     private void setUpCreateConsultant(){
+
         //region back button
         Button back = new Button();
         FXControls.setButton(back,20,20,"back");
@@ -98,7 +99,7 @@ public class Admin extends Program {
         FXControls.setButton(createButton,300,300,"Create");
         createButton.setOnAction(event -> {
             try {
-                createConsultanthandler(
+                createConsultantHandler(
                         nameInput.getText(),
                         Integer.parseInt(PomodoroDurationInput.getText()),
                         Integer.parseInt(breakDurationInput.getText())
@@ -116,7 +117,7 @@ public class Admin extends Program {
         loadGroup(targetGroup);
     }
 
-    private void createConsultanthandler(String name, int pomodoroDur, int breakDur) throws SQLException {
+    private void createConsultantHandler(String name, int pomodoroDur, int breakDur) throws SQLException {
         Connection con = DB.getCon();
         SQLHandler.createConsultant(con,name,pomodoroDur,breakDur);
         DB.closeCon();
