@@ -12,6 +12,7 @@ public class Admin extends Program {
 
     Group initial = new Group();
     Group createConsultantGroup = new Group();
+    Group deactivateConsultantGroup = new Group();
 
     @Override
     public void expand(){
@@ -33,12 +34,18 @@ public class Admin extends Program {
         initial.getChildren().add(text);
         //endregion
 
-        //region button for changing views
+        //region buttons for changing views
         Button createConsultant = new Button();
         FXControls.setButton(createConsultant,100,100,"Create Consultant");
         createConsultant.setOnAction(event -> changeGroup(initial,createConsultantGroup));
 
         initial.getChildren().add(createConsultant);
+
+        Button deactivateConsultant = new Button();
+        FXControls.setButton(deactivateConsultant,100,135,"Deactivate Consultant");
+        createConsultant.setOnAction(event -> changeGroup(initial,deactivateConsultantGroup));
+
+        initial.getChildren().add(deactivateConsultant);
         //endregion
 
         getUiRoot().getChildren().add(initial);
@@ -110,6 +117,14 @@ public class Admin extends Program {
         });
         createConsultantGroup.getChildren().add(createButton);
         //endregion
+    }
+
+    //todo; create consultant deactivation (not deletion but change of status to inactive)
+    private void setUpDeactivateConsultant(){
+
+        //engine for searching for Consultants, search criteria being name, last name or user ID
+        //clicking on Consultant puts them in focus displaying extra details and grabbing a hold of them
+        //deactivation prompt admin password, upon correct enter it changes the Consultant's status to inactive and refreshes the list
     }
 
     private void changeGroup(Group currentGroup, Group targetGroup){

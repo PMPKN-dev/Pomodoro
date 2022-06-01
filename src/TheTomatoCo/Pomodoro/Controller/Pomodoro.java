@@ -33,13 +33,12 @@ public class Pomodoro extends Program {
     //private Timeline timeline;
     //private final Label timerLabel = new Label();
     //private final IntegerProperty timeSeconds = new SimpleIntegerProperty(startTime); //sets up binding
-    Group initialScreen = new Group();
     Group pomodoroScreen = new Group();
 
 
     @Override
     public void expand(){
-        initialScreen();
+
         pomodoroSetup();
 
     }
@@ -58,70 +57,15 @@ public class Pomodoro extends Program {
      */
 
 
-    /*fixme Login is in the completely wrong spot. we have to prompt login before hub not before pomodoro
-    todo; move login to a separate controller
-     */
-    private void initialScreen(){
 
-        Text text = new Text();
-        FXControls.setPosition(text,40,60);
-        text.setText("Welcome to Pomodoro");
-        //TODO: Insert login here and make it appear before the timer through group-changing
-        //Login with ID and Pass
-        //TODO: Make it check if ID and Pass matches in database - DONE
-        //TODO: Have it refuse to enter Pomodoro if login does not match
-
-        TextField id = new TextField();
-        TextField pass = new TextField();
-        id.setPromptText("Enter ID");
-        id.setLayoutX(200);
-        id.setLayoutY(200);
-        pass.setPromptText("Enter Password");
-        pass.setLayoutX(200);
-        pass.setLayoutY(250);
-
-        PreparedStatement ps;
-        ResultSet rs;
-        String userName = id.getText();
-        String password = pass.getText();
-
-        String query = "SELECT * FROM Users WHERE userName=? AND userPass=?"; //DB not created yet, values may change
-
-        try{
-            ps = DB.getCon().prepareStatement(query);
-            ps.setString(1,userName);
-            ps.setString(2,password);
-            rs = ps.executeQuery();
-
-            if(rs.next()){
-                //enter pomodoro
-            }else{
-                //TODO: prevent entering
-                id.setText("");
-                pass.setText("");
-            }
-
-        }catch(SQLException ex){
-        }
-
-
-        initialScreen.getChildren().addAll(text,id,pass);
-
-        //change view
-        Button enterPomodoro = new Button();
-        FXControls.setButton(enterPomodoro,100,100,"Enter Pomodoro");
-        enterPomodoro.setOnAction(event -> changeGroup(initialScreen, pomodoroScreen));
-        initialScreen.getChildren().add(enterPomodoro);
-        getUiRoot().getChildren().add(initialScreen);
-    }
 
     private void pomodoroSetup(){
         //Cancel button
-        Button cancel = new Button();
-        FXControls.setButton(cancel,450,20,"Cancel");
-        cancel.setAlignment(Pos.BOTTOM_CENTER);
-        cancel.setOnAction(event -> returnToInitial(pomodoroScreen));
-        pomodoroScreen.getChildren().add(cancel);
+        //Button cancel = new Button();
+        //FXControls.setButton(cancel,450,20,"Cancel");
+        //cancel.setAlignment(Pos.BOTTOM_CENTER);
+        //cancel.setOnAction(event -> returnToInitial(pomodoroScreen));
+        //pomodoroScreen.getChildren().add(cancel);
 
         //TODO: make this work, it currently wont show up, addChildren wont work
         /*Fixme it doesn't work because PomodoroView is not a Node. I can't say about the PomodoroModel but
@@ -184,9 +128,11 @@ public class Pomodoro extends Program {
     private void loadGroup(Group group){
         getUiRoot().getChildren().addAll(group);
     }
-    private void returnToInitial(Group currentGroup){
+    /*private void returnToInitial(Group currentGroup){
         changeGroup(currentGroup,initialScreen);
     }
+
+     */
 
 
 

@@ -21,6 +21,10 @@ public class Program extends Application {
     Group defaults = new Group();
     AnchorPane uiRoot = new AnchorPane();
 
+    /**
+     * A method for getting the AnchorPane/Parent of the current Program Application
+     * @return The AnchorPane serving as the uiRoot of the current Program
+     */
     public AnchorPane getUiRoot (){
         return uiRoot;
     }
