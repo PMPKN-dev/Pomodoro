@@ -4,10 +4,14 @@ import javafx.application.*;
 import javafx.event.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 
+//import java.awt.*;
 import java.util.Objects;
 
 /**
@@ -33,6 +37,7 @@ public class Program extends Application {
     private void aProgramInitialize(Scene scene){
         scene.getStylesheets().add(Objects.requireNonNull(super.getClass().getResource("/TheTomatoCo/Resources/Style.css")).toExternalForm());
 
+        //region exit button
         Button exit = new Button();
         FXControls.setButton(exit,300,350,"exit");
         EventHandler<ActionEvent> handler = event -> {
@@ -41,7 +46,26 @@ public class Program extends Application {
         };
         exit.setOnAction(handler);
 
-        defaults.getChildren().addAll(exit);
+        defaults.getChildren().add(exit);
+        //endregion
+
+        //region userInfoBackground Rectangle
+        Rectangle userInfoBackground = new Rectangle();
+        FXControls.setPosition(userInfoBackground,400,0);
+        userInfoBackground.setHeight(100);
+        userInfoBackground.setWidth(200);
+        userInfoBackground.setFill(Color.WHITE);
+        userInfoBackground.setStroke(Color.BLACK);
+
+        defaults.getChildren().add(userInfoBackground);
+        //endregion
+
+        Label userNameLabel = new Label();
+
+        Label userStatusLabel = new Label();
+
+        Text userNameText = new Text();
+        Text userStatusText = new Text();
     }
 
 
