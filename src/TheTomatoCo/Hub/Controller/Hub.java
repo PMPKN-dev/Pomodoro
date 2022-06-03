@@ -4,7 +4,7 @@ import TheTomatoCo.Foundation.*;
 import TheTomatoCo.Admin.Controller.Admin;
 import TheTomatoCo.DoToday.Controller.DoToday;
 import TheTomatoCo.OfficeOverview.Controller.OfficeOverview;
-import TheTomatoCo.Pomodoro.Controller.Pomodoro;
+import TheTomatoCo.Pomodoro.Controller.PomodoroTimer;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -17,7 +17,7 @@ public class Hub extends Program {
     }
 
     public void startPomodoro(){
-        Pomodoro pomodoro = new Pomodoro();
+        PomodoroTimer pomodoro = new PomodoroTimer();
         launchPackage(pomodoro);
     }
 
