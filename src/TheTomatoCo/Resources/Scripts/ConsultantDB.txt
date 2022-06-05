@@ -6,8 +6,9 @@ USE ConsultantDB
 CREATE TABLE tbl_Consultant(
 	ConsultantID int PRIMARY KEY,
 	ConsultantName VARCHAR(30),
-	PomodoroTime FLOAT,
-	PomodoroBreakTime FLOAT);
+	PomodoroTime int,
+	PomodoroShortBreakTime int,
+	PomodoroLongBreakTime int);
 
 CREATE TABLE tbl_Project(
 	ProjectID int PRIMARY KEY,

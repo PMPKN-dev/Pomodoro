@@ -1,7 +1,9 @@
 package TheTomatoCo.Pomodoro.Controller;
 
+import TheTomatoCo.Foundation.DB;
 import TheTomatoCo.Foundation.FXControls;
 import TheTomatoCo.Foundation.Program;
+import TheTomatoCo.Foundation.SQLHandler;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
 
+import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,12 +47,16 @@ public class PomodoroTimer extends Program
 
     @Override
     public void expand(){
-        setUpTimer();
+        try {
+            setUpTimer();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         setUpTimerSettings();
-        updateTimer();
+
     }
 
-    public void setUpTimer(){
+    public void setUpTimer() throws SQLException {
 
         //region Change view to settings
         Button timerSettings = new Button();
@@ -81,21 +88,20 @@ public class PomodoroTimer extends Program
 
         timerGroup.getChildren().add(timerOptionsContainer);
 
+
         //endregion
         //region Switch to pomodoro timer
         pomodoroTimer.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
 
-                //a check if it has been changed, else default
-                if(timerSettings.isArmed()){
-                    //isArmed wont work, it needs to check database for new values
-                }else{
-                    timerLabel.setText("25:00"); //default
-                    timerLabel.setFont(Font.font("Verdana", FontWeight.BOLD,70));
+                try {
+                    SQLHandler.setConsultantTime(DB.getCon(),pomoTime,shortBreakTime,longBreakTime);
+                    counter = 60 * pomoTime; //should work in theory, it doesnt, counter becomes 00:00 TODO: fix me
+                    //runTimer();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-
-                //timerLabel.setText(getPomoTimeMinutes()+":"+getPomoTimeSeconds());
             }
         });
         //endregion
@@ -103,12 +109,10 @@ public class PomodoroTimer extends Program
         shortBreakTimer.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                //a check if it has been changed, else default
-                if(timerSettings.isArmed()){
-                    //isArmed wont work, it needs to check database for new values
-                }else{
-                    timerLabel.setText("05:00"); //default
-                    timerLabel.setFont(Font.font("Verdana", FontWeight.BOLD,70));
+                try {
+                    SQLHandler.setConsultantTime(DB.getCon(),pomoTime,shortBreakTime,longBreakTime);
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -117,12 +121,10 @@ public class PomodoroTimer extends Program
         longBreakTimer.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                //a check if it has been changed, else default
-                if(timerSettings.isArmed()){
-                    //isArmed wont work, it needs to check database for new values
-                }else{
-                    timerLabel.setText("10:00"); //default
-                    timerLabel.setFont(Font.font("Verdana", FontWeight.BOLD,70));
+                try {
+                    SQLHandler.setConsultantTime(DB.getCon(),pomoTime,shortBreakTime,longBreakTime);
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -227,20 +229,17 @@ public class PomodoroTimer extends Program
         Button saveChange = new Button();
         FXControls.setButton(saveChange,150,250,"Save Changes");
         saveChange.setOnAction(event -> {
-            //TODO: insert save to DB and update thread with new time
+            try {
+                SQLHandler.updateConsultant(DB.getCon(),pomodoroDurationChange,shortBreakDurationChange,longBreakDurationChange);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             changeGroup(timerSettingsGroup,timerGroup);
         });
         timerSettingsGroup.getChildren().add(saveChange);
         //endregion
 
         //getUiRoot().getChildren().add(timerSettingsGroup);
-    }
-
-    /**
-     * Update database with values from settings and change the default
-     */
-    private void updateTimer(){
-        //setPomodoroDurationChange("" + );
     }
 
     public boolean isRunning(){return isRunning;}
