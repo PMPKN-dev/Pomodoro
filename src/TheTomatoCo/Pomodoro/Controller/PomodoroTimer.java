@@ -60,7 +60,7 @@ public class PomodoroTimer extends Program
 
         //region Change view to settings
         Button timerSettings = new Button();
-        FXControls.setButton(timerSettings,500,20,"Settings");
+        FXControls.setButton(timerSettings,500,100,"Settings");
         timerSettings.setOnAction(event -> changeGroup(timerGroup,timerSettingsGroup));
 
         timerGroup.getChildren().add(timerSettings);

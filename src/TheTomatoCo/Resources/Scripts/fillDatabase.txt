@@ -1,0 +1,136 @@
+use ConsultantDB
+GO
+
+CREATE PROCEDURE fillDatabase
+	AS
+		BEGIN
+			INSERT INTO tbl_Consultant(
+			ConsultantID,
+			ConsultantName,
+			PomodoroTime,
+			PomodoroShortBreakTime,
+			PomodoroLongBreakTime)
+			VALUES
+			('JohnAdams01','John Adams',25,5,10),
+			('LarsHein01','Lars Hein',25,5,10),
+			('KarstenHansen01','Karsten Hansen',25,5,10),
+			('DortheJensen01','Dorthe Jensen',25,5,10),
+			('MichalPrimo01','Michal Primo',25,5,10),
+			('HatemAlaboud01','Hatem Alaboud',25,5,10),
+			('EsbenChristensen01','Esben Christensen',25,5,10),
+			('JanChristensen01','Jan Christensen',25,5,10),
+			('FrankHansen01','Frank Hansen',25,5,10),
+			('DortheJensen02','Dorthe Jensen',25,5,10),
+			('AndersKarkov01','Anders Karkov',25,5,10),
+			('DanielKarkov01','Daniel Karkov',25,5,10),
+			('NikolajPedersen01','Nikolaj Pedersen',25,5,10),
+			('FrankHansen02','Frank Hansen',25,5,10),
+			('NielsØstergård01','Niels Østergård',25,5,10),
+			('CarlSjøberg01','Carl Sjøberg',25,5,10),
+			('MichalJanczak01','Michal Janczak',25,5,10),
+			('LarsHein02','Lars Hein',25,5,10),
+			('VictorAlmen01','Victor Almen',25,5,10),
+			('EsbenØvland01','Esben Øvland',25,5,10);
+
+			INSERT INTO tbl_Project(
+			ProjectID,
+			ProjectName,
+			ProjectDuration)
+			VALUES
+			(01,'Launch EVO',1000),
+			(02,'Teach Interns',2000),
+			(03,'Mandatory Courses',700),
+			(04,'System Overhaul',1200);
+
+			INSERT INTO tbl_ActiveProjects(
+			ProjectID,
+			ConsultantID)
+			VALUES
+			(01,'JohnAdams01'),
+			(01,'FrankHansen02'),
+			(01,'AndersKarkov01'),
+			(02,'KarstenHansen01'),
+			(02,'HatemAlaboud01'),
+			(03,'JohnAdams01'),
+			(04,'LarsHein01'),
+			(04,'DanielKarkov01'),
+			(04,'FrankHansen02');
+
+
+
+			INSERT INTO tbl_Pomodoro(
+			PomodoroID,
+			ConsultantID)
+			VALUES
+			(01,'JohnAdams01'),
+			(02,'LarsHein01'),
+			(03,'KarstenHansen01'),
+			(04,'DortheJensen01'),
+			(05,'MichalPrimo01'),
+			(06,'HatemAlaboud01'),
+			(07,'EsbenChristensen01'),
+			(08,'JanChristensen01'),
+			(09,'FrankHansen01'),
+			(10,'DortheJensen02'),
+			(11,'AndersKarkov01'),
+			(12,'DanielKarkov01'),
+			(13,'NikolajPedersen01'),
+			(14,'FrankHansen02'),
+			(15,'NielsØstergård01'),
+			(16,'CarlSjøberg01'),
+			(17,'MichalJanczak01'),
+			(18,'LarsHein02'),
+			(19,'VictorAlmen01'),
+			(20,'EsbenØvland01');
+
+			INSERT INTO tbl_StatusOfConsultant(
+			ConsultantID,
+			Status)
+			VALUES
+			('JohnAdams01',1),
+			('LarsHein01',1),
+			('KarstenHansen01',1),
+			('DortheJensen01',1),
+			('MichalPrimo01',0),
+			('HatemAlaboud01',1),
+			('EsbenChristensen01',1),
+			('JanChristensen01',1),
+			('FrankHansen01',0),
+			('DortheJensen02',0),
+			('AndersKarkov01',1),
+			('DanielKarkov01',1),
+			('NikolajPedersen01',1),
+			('FrankHansen02',1),
+			('NielsØstergård01',1),
+			('CarlSjøberg01',0),
+			('MichalJanczak01',0),
+			('LarsHein02',0),
+			('VictorAlmen01',0),
+			('EsbenØvland01',0);	
+
+			INSERT INTO tbl_Login(
+			ConsultantID,
+			Password,
+			PermissionLevel)
+			VALUES
+			('JohnAdams01','BDhp2G',1),
+			('LarsHein01','M8EbvY',2),
+			('KarstenHansen01','J6XnP3',1),
+			('DortheJensen01','EDzj8M',1),
+			('MichalPrimo01','CAP4eT',1),
+			('HatemAlaboud01','4YJxug',1),
+			('EsbenChristensen01','2E9Bzb',1),
+			('JanChristensen01','K2Mvab',1),
+			('FrankHansen01','3GJEge',2),
+			('DortheJensen02','Kur726',1),
+			('AndersKarkov01','t7X9C2',1),
+			('DanielKarkov01','j2tWTJ',1),
+			('NikolajPedersen01','L9ZbfP',1),
+			('FrankHansen02','7g9DDB',1),
+			('NielsØstergård01','BBEb35',1),
+			('CarlSjøberg01','5LjBnF',2),
+			('MichalJanczak01','qFP8qp',2),
+			('LarsHein02','m3aSDB',1),
+			('VictorAlmen01','AAs4vn',1),
+			('EsbenØvland01','jsH79S',2);
+		END

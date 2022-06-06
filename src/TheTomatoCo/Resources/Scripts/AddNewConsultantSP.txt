@@ -1,0 +1,19 @@
+use ConsultantDB
+GO
+
+	CREATE PROCEDURE add_New_Consultant(@ConsultantID VARCHAR(30), @ConsultantName VARCHAR(30), @PomodoroTime INTEGER, @PomodoroShortBreakTime INTEGER, @PomodoroLongBreakTime INTEGER)
+		AS
+			BEGIN
+				INSERT INTO dbo.tbl_Consultant(
+				ConsultantID,
+				ConsultantName,
+				PomodoroTime,
+				PomodoroShortBreakTime,
+				PomodoroLongBreakTime)
+				VALUES(
+				@ConsultantID,
+				@ConsultantName,
+				@PomodoroTime,
+				@PomodoroShortBreakTime,
+				@PomodoroLongBreakTime);
+			END
