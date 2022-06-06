@@ -5,15 +5,42 @@ import TheTomatoCo.Admin.Controller.Admin;
 import TheTomatoCo.DoToday.Controller.DoToday;
 import TheTomatoCo.OfficeOverview.Controller.OfficeOverview;
 import TheTomatoCo.Pomodoro.Controller.PomodoroTimer;
-import javafx.scene.*;
+import javafx.scene.Group;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.*;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 public class Hub extends Program {
+    LoginData LoginID = LoginData.getInstance();
+    TextField Username = new TextField();
+    PasswordField Password = new PasswordField();
+    Button LoginButton = new Button();
+    Button BacktoLogin = new Button();
+    HBox Admingroup = new HBox();
+    HBox Consultantgroup = new HBox();
+    VBox Logingroup = new VBox();
+
+
     @Override
     public void expand() {
+        Grouping();
+        getUiRoot().getChildren().removeAll(Admingroup,Logingroup);
         initialize();
+        LoginButton.setOnAction(event -> {
+            Login();
+            getUiRoot().getChildren().add(BacktoLogin);
+            System.out.println(LoginID.getUserID());
+        });
+        BacktoLogin.setOnAction(event -> {
+            getUiRoot().getChildren().removeAll(Admingroup, Consultantgroup);
+            getUiRoot().getChildren().add(Logingroup);
+            getUiRoot().getChildren().remove(BacktoLogin);
+
+        });
     }
 
     public void startPomodoro(){
@@ -44,24 +71,82 @@ public class Hub extends Program {
     }
 
     private void initialize(){
+        Logingroup.getChildren().addAll(Username,Password,LoginButton);
+        getUiRoot().getChildren().add(Logingroup);
+        Logingroup.setSpacing(10);
+        Username.setPromptText("Username");
+        Password.setPromptText("Password");
+        FXControls.setPosition(Username,10,10);
+        FXControls.setPosition(Password,10,55);
+
+        FXControls.setButton(LoginButton,10,100,"Login");
+        FXControls.setButton(BacktoLogin,200,350,"Back");
+
+
+
+    }
+    private void Login(){
+        Connection con = DB.getCon();
+
+        try{
+            String UsernameString = Username.getText();
+            String PasswordString = Password.getText();
+            int ID = SQLHandler.GetConsultantID(con,UsernameString);
+            LoginID.setUserID(ID);
+            //returns the ID of the consultant
+            int PermissionLvl = SQLHandler.VerifyLogin(con,PasswordString,UsernameString);
+
+            if(PermissionLvl==2){
+                adminLogin();
+            } else if(PermissionLvl==1){
+                consultantLogin();
+            }else{
+                System.out.println("you seem to not have an assigned permission level");
+            }
+            System.out.println("Login successful");
+
+        }catch (SQLException e) {
+            System.out.println("Login failed");
+        }
+
+    }
+    private void Grouping(){
         Button adminLaunch = new Button();
-        FXControls.setButton(adminLaunch,10,10,"Admin");
+        adminLaunch.setText("Admin");
         adminLaunch.setOnAction(event -> startAdmin());
-        getUiRoot().getChildren().add(adminLaunch);
 
         Button officeOverviewLaunch = new Button();
-        FXControls.setButton(officeOverviewLaunch,80,10,"Office Overview");
+        officeOverviewLaunch.setText("Office Overview");
         officeOverviewLaunch.setOnAction(event -> startOfficeOverview());
-        getUiRoot().getChildren().add(officeOverviewLaunch);
 
         Button doTodayLaunch = new Button();
-        FXControls.setButton(doTodayLaunch,210,10,"Do Today");
+        doTodayLaunch.setText("Do Today");
         doTodayLaunch.setOnAction(event -> startDoToday());
-        getUiRoot().getChildren().add(doTodayLaunch);
 
         Button Pomodoro = new Button();
-        FXControls.setButton(Pomodoro,310,10,"Pomodoro");
+        Pomodoro.setText("Pomodoro");
         Pomodoro.setOnAction(event -> startPomodoro());
-        getUiRoot().getChildren().add(Pomodoro);
+
+        Button Pomodoro2 = new Button();
+        Pomodoro2.setText("Pomodoro");
+        Pomodoro2.setOnAction(event -> startPomodoro());
+
+
+        Admingroup.getChildren().addAll(adminLaunch,officeOverviewLaunch,Pomodoro2);
+        Consultantgroup.getChildren().addAll(doTodayLaunch,Pomodoro);
+
+
     }
+    private void consultantLogin(){
+        getUiRoot().getChildren().removeAll(Admingroup,Logingroup);
+        getUiRoot().getChildren().add(Consultantgroup);
+
+    }
+    private void adminLogin(){
+        getUiRoot().getChildren().removeAll(Consultantgroup,Logingroup);
+        getUiRoot().getChildren().add(Admingroup);
+
+    }
+
 }
+
