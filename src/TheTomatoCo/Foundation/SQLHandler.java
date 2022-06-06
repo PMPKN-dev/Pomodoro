@@ -17,9 +17,9 @@ public class SQLHandler {
         p.close();
     }
 
-    public static int checkLogin(Connection con, int userName) throws SQLException {
-        PreparedStatement p = con.prepareStatement("SELECT userPass FROM Users WHERE UserName=?");
-        p.setInt(1,userName);
+    public static int checkLogin(Connection con, int ConsultantID) throws SQLException {
+        PreparedStatement p = con.prepareStatement("SELECT Password FROM tbl_Login WHERE ConsultantID=?");
+        p.setInt(1,ConsultantID);
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
