@@ -61,7 +61,7 @@ public class Hub extends Program {
         getUiRoot().getChildren().add(doTodayLaunch);
 
         Button Pomodoro = new Button();
-        FXControls.setButton(Pomodoro,310,10,"Pomodoro");
+        FXControls.setButton(Pomodoro,300,10,"Pomodoro");
         Pomodoro.setOnAction(event -> startPomodoro());
         getUiRoot().getChildren().add(Pomodoro);
     }

@@ -23,6 +23,7 @@ import java.util.Objects;
 public class Program extends Application {
 
     Group defaults = new Group();
+    public Group userInfo = new Group();
     AnchorPane uiRoot = new AnchorPane();
 
     /**
@@ -52,26 +53,35 @@ public class Program extends Application {
         //region userInfoBackground Rectangle
         Rectangle userInfoBackground = new Rectangle();
         FXControls.setPosition(userInfoBackground,400,0);
-        userInfoBackground.setHeight(100);
-        userInfoBackground.setWidth(200);
+        userInfoBackground.setHeight(90);
+        userInfoBackground.setWidth(198);
         userInfoBackground.setFill(Color.WHITE);
         userInfoBackground.setStroke(Color.BLACK);
 
-        defaults.getChildren().add(userInfoBackground);
+        userInfo.getChildren().add(userInfoBackground);
         //endregion
 
         Label userNameLabel = new Label();
+        FXControls.setTextNode(userNameLabel,405,5,"Logged in as: ");
+        userInfo.getChildren().add(userNameLabel);
 
         Label userStatusLabel = new Label();
+        FXControls.setTextNode(userStatusLabel,405,45,"With Permission level: ");
+        userInfo.getChildren().add(userStatusLabel);
 
         Text userNameText = new Text();
+        FXControls.setTextNode(userNameText,405,40,"Unknown");
+        userInfo.getChildren().add(userNameText);
+
         Text userStatusText = new Text();
+        FXControls.setTextNode(userStatusText,405,80,"Undefined");
+        userInfo.getChildren().add(userStatusText);
     }
 
 
     public void start(Stage primaryStage) {
         uiRoot = new AnchorPane();
-        uiRoot.getChildren().addAll(defaults);
+        uiRoot.getChildren().addAll(defaults,userInfo);
         Scene scene = new Scene(uiRoot, 600, 400);
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);

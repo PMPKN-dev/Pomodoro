@@ -25,4 +25,13 @@ public class SQLHandler {
         rs.next();
         return rs.getInt(1);
     }
+
+    public static int getPermissionLevel (Connection con, int userName) throws SQLException {
+        PreparedStatement p = con.prepareStatement("SELECT PermissionLevel FROM tbl_Login WHERE ConsultantID=?");
+        p.setInt(1,userName);
+        p.execute();
+        ResultSet rs = p.getResultSet();
+        rs.next();
+        return rs.getInt(1);
+    }
 }

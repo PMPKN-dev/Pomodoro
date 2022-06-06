@@ -4,7 +4,7 @@ USE ConsultantDB
 
 
 CREATE TABLE tbl_Consultant(
-	ConsultantID int PRIMARY KEY,
+	ConsultantID VARCHAR(30) PRIMARY KEY,
 	ConsultantName VARCHAR(30),
 	PomodoroTime FLOAT,
 	PomodoroBreakTime FLOAT);
@@ -18,31 +18,31 @@ CREATE TABLE tbl_Project(
 CREATE TABLE tbl_ActiveProjects(
 	ProjectID int,
 	FOREIGN KEY(ProjectID) REFERENCES tbl_Project(ProjectID),
-	ConsultantID int,
+	ConsultantID VARCHAR(30),
 	FOREIGN KEY(ConsultantID) REFERENCES tbl_Consultant(ConsultantID)
 );
 
 CREATE TABLE tbl_Pomodoro(
 	PomodoroID int PRIMARY KEY,
-	ConsultantID int,
+	ConsultantID VARCHAR(30),
 	FOREIGN KEY(ConsultantID) REFERENCES tbl_Consultant(ConsultantID),
 );
 
 CREATE TABLE tbl_StatusOfConsultant(
-	ConsultantID int,
+	ConsultantID VARCHAR(30),
 	FOREIGN KEY(ConsultantID) REFERENCES tbl_Consultant(ConsultantID),
 	Status BIT
 );
 
 CREATE TABLE tbl_Login(
-	ConsultantID int,
+	ConsultantID VARCHAR(30),
 	FOREIGN KEY(ConsultantID) REFERENCES tbl_Consultant(ConsultantID),
 	Password VARCHAR(30),
 	PermissionLevel int
 );
 
 CREATE TABLE tbl_Tasks(
-	ConsultantID int,
+	ConsultantID VARCHAR(30),
 	FOREIGN KEY(ConsultantID) REFERENCES tbl_Consultant(ConsultantID),
 	AssignedPomodoros int,
 	CompletedOrNot BIT

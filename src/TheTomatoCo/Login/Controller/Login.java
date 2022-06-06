@@ -4,14 +4,14 @@ import TheTomatoCo.Foundation.DB;
 import TheTomatoCo.Foundation.FXControls;
 import TheTomatoCo.Foundation.Program;
 import TheTomatoCo.Foundation.SQLHandler;
+import TheTomatoCo.Hub.Controller.Hub;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Login extends Program {
@@ -27,6 +27,7 @@ public class Login extends Program {
     public void expand() {
 
         initialScreen();
+        getUiRoot().getChildren().remove(userInfo);
 
     }
     private void initialScreen(){
@@ -106,7 +107,9 @@ public class Login extends Program {
 
             if (result == (int) Double.parseDouble(userPass)) {
                 LoginErrorText.setText("");
-                //make login work/ make it open the jub program here
+                //make login work/ make it open the hub program here
+                launchHub();
+                setUserData();
                 System.out.println("Login success");
             } else {
                 LoginErrorText.setText("Password is incorrect");
@@ -125,6 +128,20 @@ public class Login extends Program {
         }
 
         DB.closeCon();
+
+    }
+
+    private void launchHub(){
+        Stage currentStage = (Stage) getUiRoot().getScene().getWindow();
+        System.out.println(currentStage.toString());
+        currentStage.close();
+
+        Hub Hub = new Hub();
+        Stage stage = new Stage();
+        Hub.start(stage);
+        stage.show();
+    }
+    private void setUserData(){
 
     }
 }
