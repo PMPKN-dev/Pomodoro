@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class Login extends Program {
 
@@ -100,12 +101,12 @@ public class Login extends Program {
     public void loginCheckHandler(String userName, String userPass) {
 
         try {
-            int result = SQLHandler.checkLogin(
+            String result = SQLHandler.checkLogin(
                     DB.getCon(),
-                    (int) Double.parseDouble(userName)
+                    userName
             );
 
-            if (result == (int) Double.parseDouble(userPass)) {
+            if (Objects.equals(result, userPass)) {
                 LoginErrorText.setText("");
                 //make login work/ make it open the hub program here
                 launchHub();
@@ -121,10 +122,6 @@ public class Login extends Program {
             id.setText("");
             LoginErrorText.setText("Invalid/Unknown username");
             e.printStackTrace();
-        } catch (NumberFormatException n){
-            id.setText("");
-            LoginErrorText.setText("Username can only consist of int");
-            n.printStackTrace();
         }
 
         DB.closeCon();

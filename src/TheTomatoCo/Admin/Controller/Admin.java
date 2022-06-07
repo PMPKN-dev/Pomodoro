@@ -17,9 +17,10 @@ public class Admin extends Program {
     @Override
     public void expand(){
 
-
         setUpInitial();
         setUpCreateConsultant();
+        setUpDeactivateConsultant();
+        getUiRoot().getChildren().add(initial);
 
 
 
@@ -37,18 +38,21 @@ public class Admin extends Program {
         //region buttons for changing views
         Button createConsultant = new Button();
         FXControls.setButton(createConsultant,100,100,"Create Consultant");
-        createConsultant.setOnAction(event -> changeGroup(initial,createConsultantGroup));
+        createConsultant.setOnAction(event -> changeView(initial,createConsultantGroup));
 
         initial.getChildren().add(createConsultant);
 
         Button deactivateConsultant = new Button();
         FXControls.setButton(deactivateConsultant,100,135,"Deactivate Consultant");
-        createConsultant.setOnAction(event -> changeGroup(initial,deactivateConsultantGroup));
+        deactivateConsultant.setOnAction(event -> changeView(initial,deactivateConsultantGroup));
 
         initial.getChildren().add(deactivateConsultant);
         //endregion
+    }
 
-        getUiRoot().getChildren().add(initial);
+    private void changeView(Group currentGroup,Group targetGroup){
+        getUiRoot().getChildren().remove(currentGroup);
+        getUiRoot().getChildren().add(targetGroup);
     }
 
     private void setUpCreateConsultant(){
@@ -56,22 +60,40 @@ public class Admin extends Program {
         //region back button
         Button back = new Button();
         FXControls.setButton(back,20,20,"back");
-        back.setOnAction(event -> returnToInitial(createConsultantGroup));
+        back.setOnAction(event -> changeView(createConsultantGroup,initial));
         createConsultantGroup.getChildren().add(back);
         //endregion
 
-        //region Name field
-        TextField nameInput  = new TextField();
-        FXControls.setPosition(nameInput,120,150);
-        nameInput.setPromptText("Input name");
+        //region fName field
+        TextField fNameInput  = new TextField();
+        FXControls.setPosition(fNameInput,40,80);
+        fNameInput.setMaxWidth(120);
+        fNameInput.setPromptText("First name");
 
-        createConsultantGroup.getChildren().add(nameInput);
+        createConsultantGroup.getChildren().add(fNameInput);
+        //endregion
+
+        //region lName field
+        TextField lNameInput  = new TextField();
+        FXControls.setPosition(lNameInput,170,80);
+        lNameInput.setMaxWidth(120);
+        lNameInput.setPromptText("Last name");
+
+        createConsultantGroup.getChildren().add(lNameInput);
+        //endregion
+
+        //region DurationNotifierText
+        Text notifierText = new Text();
+        FXControls.setTextNode(notifierText,40,140,"Durations in minutes:");
+
+        createConsultantGroup.getChildren().add(notifierText);
         //endregion
 
         //region Pomodoro duration field
         TextField PomodoroDurationInput = new TextField();
-        PomodoroDurationInput.setPromptText("Pomodoro duration");
-        FXControls.setPosition(PomodoroDurationInput,120,120);
+        PomodoroDurationInput.setPromptText("Pomodoro");
+        PomodoroDurationInput.setMaxWidth(100);
+        FXControls.setPosition(PomodoroDurationInput,40,160);
 
         //this part is not coded by me but taken from the internet, it is however not required for the program to work
         // it serves as a Quality of Life improvement
@@ -87,29 +109,50 @@ public class Admin extends Program {
         createConsultantGroup.getChildren().add(PomodoroDurationInput);
         //endregion
 
-        //region Break duration field
-        TextField breakDurationInput = new TextField();
-        breakDurationInput.setPromptText("Break Duration");
-        FXControls.setPosition(breakDurationInput,120,180);
+        //region longBreak duration field
+        TextField longBreakDurationInput = new TextField();
+        longBreakDurationInput.setPromptText("Long break");
+        longBreakDurationInput.setMaxWidth(100);
+        FXControls.setPosition(longBreakDurationInput,150,160);
 
-        breakDurationInput.textProperty().addListener((observable, oldValue, newValue) -> {
+        longBreakDurationInput.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) { //takes the vale of the field and if it is not a Decimal Integer ->
-                breakDurationInput.setText(newValue.replaceAll("[^\\d]", "")); //it replaces ever non-Decimal-integer with a blank field
+                longBreakDurationInput.setText(newValue.replaceAll("[^\\d]", "")); //it replaces ever non-Decimal-integer with a blank field
             }
         });
 
-        createConsultantGroup.getChildren().add(breakDurationInput);
+        createConsultantGroup.getChildren().add(longBreakDurationInput);
+        //endregion
+
+        //region shortBreak duration field
+        TextField shortBreakDurationInput = new TextField();
+        shortBreakDurationInput.setPromptText("Short break");
+        shortBreakDurationInput.setMaxWidth(100);
+        FXControls.setPosition(shortBreakDurationInput,260,160);
+
+        shortBreakDurationInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) { //takes the vale of the field and if it is not a Decimal Integer ->
+                shortBreakDurationInput.setText(newValue.replaceAll("[^\\d]", "")); //it replaces ever non-Decimal-integer with a blank field
+            }
+        });
+
+        createConsultantGroup.getChildren().add(shortBreakDurationInput);
         //endregion
 
         //region create button
         Button createButton = new Button();
-        FXControls.setButton(createButton,300,300,"Create");
+        FXControls.setButton(createButton,150,230,"Create");
+
+        //concatenation kekw
+        String fullName = fNameInput.getText()+" "+lNameInput.getText();
+
         createButton.setOnAction(event -> {
             try {
                 createConsultantHandler(
-                        nameInput.getText(),
-                        Integer.parseInt(PomodoroDurationInput.getText()),
-                        Integer.parseInt(breakDurationInput.getText())
+                        fullName,
+                        (int) Double.parseDouble(PomodoroDurationInput.getText()),
+                        (int) Double.parseDouble(shortBreakDurationInput.getText()),
+                        (int) Double.parseDouble(longBreakDurationInput.getText())
                 );
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -122,31 +165,39 @@ public class Admin extends Program {
     //todo; create consultant deactivation (not deletion but change of status to inactive)
     private void setUpDeactivateConsultant(){
 
-        //engine for searching for Consultants, search criteria being name, last name or user ID
-        //clicking on Consultant puts them in focus displaying extra details and grabbing a hold of them
-        //deactivation prompt admin password, upon correct enter it changes the Consultant's status to inactive and refreshes the list
-    }
+        //region back button
+        Button back = new Button();
+        FXControls.setButton(back,20,20,"back");
+        back.setOnAction(event -> changeView(deactivateConsultantGroup,initial));
+        //createConsultantGroup.getChildren().add(back);
+        //endregion
 
-    private void changeGroup(Group currentGroup, Group targetGroup){
-        removeGroup(currentGroup);
-        loadGroup(targetGroup);
-    }
+        //region Name field
+        TextField nameInput  = new TextField();
+        FXControls.setPosition(nameInput,120,150);
+        nameInput.setPromptText("Input name");
 
-    private void createConsultantHandler(String name, int pomodoroDur, int breakDur) throws SQLException {
+        //createConsultantGroup.getChildren().add(nameInput);
+        //endregion
+
+        //region create button
+        Button deactivateButton = new Button();
+        FXControls.setButton(deactivateButton,300,300,"Deactivate");
+        //deactivateButton.setOnAction(event -> );
+        //createConsultantGroup.getChildren().add(deactivateButton);
+        //endregion
+
+
+
+    //engine for searching for Consultants, search criteria being name, last name or user ID
+    //clicking on Consultant puts them in focus displaying extra details and grabbing a hold of them
+    //deactivation prompt admin password, upon correct enter it changes the Consultant's status to inactive and refreshes the list
+}
+
+    private void createConsultantHandler(String name, int pomodoroDur, int shortBreakDur, int longBreakDur) throws SQLException {
         Connection con = DB.getCon();
-        SQLHandler.createConsultant(con,name,pomodoroDur,breakDur);
+        SQLHandler.createConsultant(con,name,pomodoroDur,shortBreakDur,longBreakDur);
         DB.closeCon();
     }
 
-    private void returnToInitial(Group currentGroup){
-        changeGroup(currentGroup,initial);
-    }
-
-    private void removeGroup(Group group){
-        getUiRoot().getChildren().removeAll(group);
-    }
-
-    private void loadGroup(Group group){
-        getUiRoot().getChildren().addAll(group);
-    }
 }
