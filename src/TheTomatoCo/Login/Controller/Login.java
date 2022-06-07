@@ -139,6 +139,8 @@ public class Login extends Program {
         stage.show();
     }
     private void setUserData(){
-
+        /*todo; make it send info Somewhere:tm: that keeps hold of it (probably the Program's UIRoot) and from there have it
+        todo; display proper information in the top right corner at all times
+         */
     }
 }

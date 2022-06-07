@@ -27,13 +27,6 @@ public class Admin extends Program {
     }
 
     private void setUpInitial(){
-        //region test text
-        Text text = new Text();
-        FXControls.setPosition(text,60,60);
-        text.setText("this text is the initial display in this window");
-
-        initial.getChildren().add(text);
-        //endregion
 
         //region buttons for changing views
         Button createConsultant = new Button();
@@ -195,18 +188,31 @@ public class Admin extends Program {
 }
 
     private void createConsultantHandler(String name, int pomodoroDur, int shortBreakDur, int longBreakDur) throws SQLException {
+        //todo; create a loop that generates a user ID based on fName-lName-No
+        //make a check for fName and lName based on previous users
+            //takes fName-lName-01 and checks for availability in database
+            //if available, uses it
+            //else fName-lName-++ until found
+        //displays final Username and creates login with given Username and password 0000
         Connection con = DB.getCon();
         SQLHandler.createConsultant(con,name,pomodoroDur,shortBreakDur,longBreakDur);
         DB.closeCon();
     }
 
     private void deactivateConsultantHandler(String ID){
+        Text statusResult = new Text();
+        FXControls.setTextNode(statusResult,120, 110,"");
+        deactivateConsultantGroup.getChildren().add(statusResult);
+
+        //fixme this does not distinguish real ID's from "wrong" ID's that are not in the database, somehow
         try{
         SQLHandler.deactivateConsultant(DB.getCon(),ID);
         DB.closeCon();
+        statusResult.setText("User successfully deactivated");
         }
         catch(SQLException s){
             s.printStackTrace();
+            statusResult.setText("An error occurred. Ensure the ID is correct or that the user isn't already inactive");
         }
     }
 

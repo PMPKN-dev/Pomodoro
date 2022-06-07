@@ -132,7 +132,7 @@ public class SQLHandler {
     }
 
     public static void deactivateConsultant(Connection con, String ID) throws SQLException {
-        PreparedStatement p = con.prepareStatement("UPDATE Status FROM tbl_StatusOfConsultant WHERE ConsultantID=?");
+        PreparedStatement p = con.prepareStatement("UPDATE tbl_StatusOfConsultant SET Status=0 WHERE ConsultantID=?");
         p.setString(1,ID);
         p.execute();
     }
