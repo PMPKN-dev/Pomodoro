@@ -130,4 +130,10 @@ public class SQLHandler {
         rs.next();
         return rs.getInt(1);
     }
+
+    public static void deactivateConsultant(Connection con, String ID) throws SQLException {
+        PreparedStatement p = con.prepareStatement("UPDATE Status FROM tbl_StatusOfConsultant WHERE ConsultantID=?");
+        p.setString(1,ID);
+        p.execute();
+    }
 }

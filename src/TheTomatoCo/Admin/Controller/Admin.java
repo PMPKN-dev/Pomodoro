@@ -169,22 +169,22 @@ public class Admin extends Program {
         Button back = new Button();
         FXControls.setButton(back,20,20,"back");
         back.setOnAction(event -> changeView(deactivateConsultantGroup,initial));
-        //createConsultantGroup.getChildren().add(back);
+        deactivateConsultantGroup.getChildren().add(back);
         //endregion
 
-        //region Name field
-        TextField nameInput  = new TextField();
-        FXControls.setPosition(nameInput,120,150);
-        nameInput.setPromptText("Input name");
+        //region IDInput field
+        TextField IDInput  = new TextField();
+        FXControls.setPosition(IDInput,120,150);
+        IDInput.setPromptText("Input Username/ConsultantID");
 
-        //createConsultantGroup.getChildren().add(nameInput);
+        deactivateConsultantGroup.getChildren().add(IDInput);
         //endregion
 
-        //region create button
+        //region deactivate button
         Button deactivateButton = new Button();
         FXControls.setButton(deactivateButton,300,300,"Deactivate");
-        //deactivateButton.setOnAction(event -> );
-        //createConsultantGroup.getChildren().add(deactivateButton);
+        deactivateButton.setOnAction(event -> deactivateConsultantHandler(IDInput.getText()));
+        deactivateConsultantGroup.getChildren().add(deactivateButton);
         //endregion
 
 
@@ -198,6 +198,16 @@ public class Admin extends Program {
         Connection con = DB.getCon();
         SQLHandler.createConsultant(con,name,pomodoroDur,shortBreakDur,longBreakDur);
         DB.closeCon();
+    }
+
+    private void deactivateConsultantHandler(String ID){
+        try{
+        SQLHandler.deactivateConsultant(DB.getCon(),ID);
+        DB.closeCon();
+        }
+        catch(SQLException s){
+            s.printStackTrace();
+        }
     }
 
 }
