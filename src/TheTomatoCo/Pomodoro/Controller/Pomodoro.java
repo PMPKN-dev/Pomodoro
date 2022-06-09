@@ -244,13 +244,18 @@ public class Pomodoro extends Program
     private void pauseTimer(){timer.cancel();}
     private void runTimer(){
         //region the clock
+        //TODO: Fix the clock
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 Platform.runLater(() -> {
 
-                    counter = Integer.parseInt(timerLabel.getText());
+                    //counter = Integer.parseInt(timerLabel.getText()); //counter is not a parseable Integer error
+                    //timerLabel.setText(String.valueOf(counter));
+                    //timerLabel = Integer.toString(counter);
+                    counter = (int) Double.parseDouble(String.valueOf(timerLabel.getText()));
+                    //TODO: is it possible to make timerLabel into a String instead of a label?
 
                     for(int i = counter; i > 0; i--){
                         minutes = counter / 60;
@@ -340,7 +345,6 @@ public class Pomodoro extends Program
         timerSettingsGroup.getChildren().add(saveChange);
         //endregion
 
-        //getUiRoot().getChildren().add(timerSettingsGroup);
     }
 
     //region group methods
@@ -367,4 +371,19 @@ public class Pomodoro extends Program
     }
     //endregion
 
+    public class TimeClass extends ActionEvent {
+        int counter;
+
+        public TimeClass(int counter){
+            this.counter = counter;
+        }
+        public void actionPerformed(ActionEvent tc){
+            counter--;
+            if(counter >= 1){
+                timerLabel.setText("Timeleft: "+counter);
+            }else{
+                timer.cancel();
+            }
+        }
+    }
 }
