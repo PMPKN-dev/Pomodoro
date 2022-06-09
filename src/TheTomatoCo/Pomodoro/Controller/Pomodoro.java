@@ -38,30 +38,17 @@ public class Pomodoro extends Program
     Group timerSettingsGroup = new Group();
 
     //region Constants
-    private TextField pomodoroDurationChange;
-    private TextField shortBreakDurationChange;
-    private TextField longBreakDurationChange;
-    private int pomoTime;
-    private int shortBreakTime;
-    private int longBreakTime;
-    private TextField UserName;
-    private TextField Password;
-    private Button Login;
+    private TextField pomodoroDurationChange,shortBreakDurationChange,longBreakDurationChange,UserName,Password;
+    private int pomoTime,shortBreakTime,longBreakTime;
+    private Button Login,pauseButton,resumeButton;
     private Text pomodoroTimer, shortBreakTimer, longBreakTimer;
     private HBox timerOptionsContainer;
-    private Button pauseButton;
-    private Button resumeButton;
     private Label timerLabel;
     private Timer timer = new Timer();
     private int seconds, minutes = 0;
-    private int counter = 60 * 25; //placeholder 25min
-    private boolean isRunning = false;
-    private boolean isBreak = false;
+    private int counter;
     Connection con = DB.getCon();
-    LoginData LoginID = LoginData.getInstance();
     //endregion
-
-    //TODO: better counter variable, currently resume/start defaults to magic number counter
 
     @Override
     public void expand() {
@@ -179,22 +166,20 @@ public class Pomodoro extends Program
                         //
                     }
                 });
-                //TODO: have it load the consultant data for pomodoro
                 //endregion
             }
         });
 
         //endregion
 
-        //region Switch to pomodoro timer
+        //region Switch to pomodoro timer updated through database
         pomodoroTimer.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
 
                 try {
                     String updatedPomodoro = SQLHandler.setPomodoroTime(con,UserName.getText());
-                    //counter = 60 * pomoTime; //should work in theory, it doesnt, counter becomes 00:00 TODO: fix me
-                    //runTimer();
+                    timerLabel.setText(updatedPomodoro);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -206,7 +191,8 @@ public class Pomodoro extends Program
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
-                    SQLHandler.setConsultantTime(con,pomoTime,shortBreakTime,longBreakTime,UserName.getText());
+                    String updatedShortBreak = SQLHandler.setShortBreakTime(con,UserName.getText());
+                    timerLabel.setText(updatedShortBreak);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -218,15 +204,14 @@ public class Pomodoro extends Program
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
-                    SQLHandler.setConsultantTime(con,pomoTime,shortBreakTime,longBreakTime,UserName.getText());
+                    String updatedLongBreak = SQLHandler.setLongBreakTime(con,UserName.getText());
+                    timerLabel.setText(updatedLongBreak);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         });
         //endregion
-
-
 
         //region the timer itself and start/pause button
         timerLabel = new Label(); //default
@@ -254,7 +239,6 @@ public class Pomodoro extends Program
 
         timerGroup.getChildren().add(vBox);
         //endregion
-
     }
 
     private void pauseTimer(){timer.cancel();}
@@ -265,6 +249,23 @@ public class Pomodoro extends Program
             @Override
             public void run() {
                 Platform.runLater(() -> {
+
+                    counter = Integer.parseInt(timerLabel.getText());
+
+                    for(int i = counter; i > 0; i--){
+                        minutes = counter / 60;
+                        seconds = counter % 60; //Modulo gives the remainder
+
+                        if(seconds < 10 && minutes < 10){ //if its 09:09, it knows to put 0 infront of the counters
+                            timerLabel.setText("0" + minutes + ":0" + seconds);
+                        }else if(minutes < 10){ //if its 09:15, it knows seconds is normal counter
+                            timerLabel.setText("0" + minutes + ":" + seconds);
+                        }else{
+                            timerLabel.setText(minutes + ":" + seconds); //If neither is below 10 in counter
+                        }
+                    }
+                    //region former clock
+                    /*
                     counter--;
                     seconds = counter % 60; //Modulo gives the remainder
                     minutes = counter / 60;
@@ -277,6 +278,8 @@ public class Pomodoro extends Program
                     }else{
                         timerLabel.setText(minutes + ":" + seconds); //If neither is below 10 in counter
                     }
+                     */
+                    //endregion
                 });
             }
         },0,1000);
@@ -328,7 +331,6 @@ public class Pomodoro extends Program
         FXControls.setButton(saveChange,150,250,"Save Changes");
         saveChange.setOnAction(event -> {
             try {
-                //SQLHandler.VerifyLogin(con,)
                 SQLHandler.updateConsultant(con,pomodoroDurationChange,shortBreakDurationChange,longBreakDurationChange,UserName.getText());
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -338,11 +340,9 @@ public class Pomodoro extends Program
         timerSettingsGroup.getChildren().add(saveChange);
         //endregion
 
-        getUiRoot().getChildren().add(timerSettingsGroup);
+        //getUiRoot().getChildren().add(timerSettingsGroup);
     }
 
-    private boolean isRunning(){return isRunning;}
-    private void setRunning(boolean running){isRunning = running;}
     //region group methods
     private void changeGroup(Group currentGroup, Group targetGroup){
         removeGroup(currentGroup);
@@ -366,6 +366,5 @@ public class Pomodoro extends Program
         this.longBreakDurationChange.getText();
     }
     //endregion
-
 
 }
