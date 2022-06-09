@@ -1,12 +1,11 @@
 package TheTomatoCo.OfficeOverview.Controller;
 
-import TheTomatoCo.Foundation.Program;
-import TheTomatoCo.Pomodoro.Controller.PomodoroTimer;
+import TheTomatoCo.Pomodoro.Controller.Pomodoro;
 
-public class MyRunnable extends PomodoroTimer implements Runnable {
+public class MyRunnable extends Pomodoro implements Runnable {
     @Override
     public void run(){
-        PomodoroTimer johnAdams = new PomodoroTimer();
+        Pomodoro johnAdams = new Pomodoro();
         //johnAdams.setUpTimerSettings();
         //johnAdams.setUpTimer();
         //johnAdams.runTimer();

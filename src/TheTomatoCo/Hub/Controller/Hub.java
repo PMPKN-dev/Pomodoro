@@ -5,9 +5,8 @@ import TheTomatoCo.Admin.Controller.Admin;
 import TheTomatoCo.DoToday.Controller.DoToday;
 import TheTomatoCo.OfficeOverview.Controller.OfficeOverview;
 //import TheTomatoCo.Pomodoro.Controller.Pomodoro;
-import javafx.scene.*;
+import TheTomatoCo.Pomodoro.Controller.Pomodoro;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
 import javafx.stage.*;
 
 public class Hub extends Program {
@@ -17,9 +16,8 @@ public class Hub extends Program {
     }
 
     public void startPomodoro(){
-        //Todo; re-add this when there is a controller
-        //Pomodoro pomodoro = new Pomodoro();
-        //launchPackage(pomodoro);
+        Pomodoro pomodoro = new Pomodoro();
+        launchPackage(pomodoro);
     }
 
     public void startDoToday(){
