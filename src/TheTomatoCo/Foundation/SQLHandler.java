@@ -94,39 +94,42 @@ public class SQLHandler {
     }
 
 
-    public static void updateConsultant(Connection con, TextField pomodoroLength, TextField shortBreakLength, TextField longBreakLength, String ConsultantID) throws SQLException{
+    public static void updateConsultant(Connection con, int pomodoroLength, int shortBreakLength, int longBreakLength, String ConsultantID) throws SQLException{
         PreparedStatement p = con.prepareStatement("UPDATE tbl_Consultant SET PomodoroTime = ?, PomodoroShortBreakTime = ?, PomodoroLongBreakTime = ? WHERE ConsultantID = ?");
-        p.setString(1,pomodoroLength.getText());
-        p.setString(2,shortBreakLength.getText());
-        p.setString(3,longBreakLength.getText());
+        p.setInt(1,pomodoroLength);
+        p.setInt(2,shortBreakLength);
+        p.setInt(3,longBreakLength);
+        //p.setString(1,pomodoroLength.getText());
+        //p.setString(2,shortBreakLength.getText());
+        //p.setString(3,longBreakLength.getText());
         p.setString(4,ConsultantID);
         p.executeUpdate();
         p.close();
     }
 
-    public static String setPomodoroTime(Connection con, String ConsultantID) throws SQLException{
+    public static int setPomodoroTime(Connection con, String ConsultantID) throws SQLException{
         PreparedStatement p = con.prepareStatement("SELECT PomodoroTime FROM tbl_Consultant WHERE ConsultantID = ?");
         p.setString(1,ConsultantID);
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
-        return rs.getString(1);
+        return rs.getInt(1);
     }
-    public static String setShortBreakTime(Connection con, String ConsultantID) throws SQLException{
+    public static int setShortBreakTime(Connection con, String ConsultantID) throws SQLException{
         PreparedStatement p = con.prepareStatement("SELECT PomodoroShortBreakTime FROM tbl_Consultant WHERE ConsultantID = ?");
         p.setString(1,ConsultantID);
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
-        return rs.getString(1);
+        return rs.getInt(1);
     }
-    public static String setLongBreakTime(Connection con, String ConsultantID) throws SQLException{
+    public static int setLongBreakTime(Connection con, String ConsultantID) throws SQLException{
         PreparedStatement p = con.prepareStatement("SELECT PomodoroLongBreakTime FROM tbl_Consultant WHERE ConsultantID = ?");
         p.setString(1,ConsultantID);
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
-        return rs.getString(1);
+        return rs.getInt(1);
     }
 
     public static int getPermissionLevel (Connection con, int userName) throws SQLException {
