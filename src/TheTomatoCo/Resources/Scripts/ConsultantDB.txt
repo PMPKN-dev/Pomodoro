@@ -46,6 +46,7 @@ CREATE TABLE tbl_Tasks(
 	ConsultantID VARCHAR(30),
 	FOREIGN KEY(ConsultantID) REFERENCES tbl_Consultant(ConsultantID),
 	AssignedPomodoros int,
-	CompletedOrNot BIT
+	CompletedOrNot BIT,
+	TaskName NCHAR(55)
 );
 
