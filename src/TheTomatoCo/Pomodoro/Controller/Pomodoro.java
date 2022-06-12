@@ -1,9 +1,6 @@
 package TheTomatoCo.Pomodoro.Controller;
 
-import TheTomatoCo.Foundation.DB;
-import TheTomatoCo.Foundation.FXControls;
-import TheTomatoCo.Foundation.Program;
-import TheTomatoCo.Foundation.SQLHandler;
+import TheTomatoCo.Foundation.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -29,6 +26,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Timer;
@@ -47,9 +45,11 @@ public class Pomodoro extends Program {
     private Timer timer = new Timer();
     private boolean sound = true;
     private boolean isRunning = false;
-    private int timeleft = 0;
+    private int timeLeft1 = 60*25;
+    private int timeLeft = 0;
     private int seconds = 0;
     private int minutes = 0;
+    private int current;
     private String seconds_string = String.format("%02d", seconds);
     private String minutes_string = String.format("%02d", minutes);
     Connection con = DB.getCon();
@@ -184,7 +184,7 @@ public class Pomodoro extends Program {
                 try {
                     int updatedPomodoro = SQLHandler.setPomodoroTime(con, userName.getText());
                     timerLabel.setText(updatedPomodoro + ":" + seconds_string);
-                    timeleft = (int) Double.parseDouble(timerLabel.getText());
+                    timeLeft = (int) Double.parseDouble(timerLabel.getText());
 
                     /*
                     if(seconds < 10){ //if its X:09, it knows to put 0 infront of the counter
@@ -201,45 +201,29 @@ public class Pomodoro extends Program {
             }
         });
         //endregion
-        //region Switch to short break timer
+        //region Switch to short break timer updated through database
         shortBreakTimer.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
                     int updatedShortBreak = SQLHandler.setShortBreakTime(con, userName.getText());
                     timerLabel.setText(updatedShortBreak + ":" + seconds_string);
-                    timeleft = (int) Double.parseDouble(timerLabel.getText());
-                    /*
-                    if(seconds < 10){ //if its X:09, it knows to put 0 infront of the counter
-                        timerLabel.setText(updatedShortBreak + ":0" + seconds);
-                    }else{
-                        timerLabel.setText(updatedShortBreak + ":" + seconds); //If neither is below 10 in counter
-                    }
-
-                     */
+                    timeLeft = (int) Double.parseDouble(timerLabel.getText());
+                    startTimer();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         });
         //endregion
-        //region Switch to long break timer
+        //region Switch to long break timer updated through database
         longBreakTimer.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
                     int updatedLongBreak = SQLHandler.setLongBreakTime(con, userName.getText());
                     timerLabel.setText(updatedLongBreak + ":" + seconds_string);
-                    timeleft = (int) Double.parseDouble(timerLabel.getText());
-
-                    /*
-                    if(seconds < 10){ //if its X:09, it knows to put 0 infront of the counter
-                        timerLabel.setText(updatedLongBreak + ":0" + seconds);
-                    }else{
-                        timerLabel.setText(updatedLongBreak + ":" + seconds); //If neither is below 10 in counter
-                    }
-
-                     */
+                    timeLeft = (int) Double.parseDouble(timerLabel.getText());
 
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -272,7 +256,8 @@ public class Pomodoro extends Program {
             @Override
             public void handle(ActionEvent actionEvent) {
                 //startTimer();
-                runTimer();
+                //runTimer();
+                formerRunTimer();
             }
         });
 
@@ -305,37 +290,44 @@ public class Pomodoro extends Program {
 
     }
     private void runTimer() {
-        //region the clock
-        //TODO: Fix the clock
+        //this method grabs Clock class and uses it as an object
+        //the clock is used on timeLeft to make counter actually go down
+        //the timeLeft is then added to the String timerLabel
+
+        Clock clock = new Clock();
+
+        //clock.run();
+
+
+
+        //endregion
+    }
+    private void formerRunTimer(){
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 Platform.runLater(() -> {
+                    //timeLeft = (int) Double.parseDouble(timerLabel.getText());
 
-                    minutes = timeleft / 60;
-                    seconds = timeleft % 60;
+                    timeLeft--;
+                    seconds = timeLeft % 60; //Modulo gives the remainder
+                    minutes = (timeLeft / 60) % 60;
 
-                    seconds--;
-                    if(seconds == 0){
-                        minutes--;
+                    /*
+                    //Making timer look pretty
+                    if(seconds < 10 && minutes < 10){ //if its 09:09, it knows to put 0 infront of the counters
+                        timerLabel.setText("0" + minutes + ":0" + seconds);
+                    }else if(minutes < 10){ //if its 09:15, it knows seconds is normal counter
+                        timerLabel.setText("0" + minutes + ":" + seconds);
+                    }else{
+                        timerLabel.setText(minutes + ":" + seconds); //If neither is below 10 in counter
                     }
-                    if(minutes == 0 && seconds == 0){
-                        alarm();
-                    }
 
-
-                    timerLabel.setText(String.valueOf(timeleft));
-
-                    /**
-                     * timeLeft grabs the current time
-                     * It currently goes straight to 0
                      */
-
                 });
             }
-        }, 0, 1000);
-        //endregion
+        },0,1000);
     }
 
     private void alarm(){
