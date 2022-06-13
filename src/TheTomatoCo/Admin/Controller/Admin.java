@@ -24,7 +24,6 @@ public class Admin extends Program {
         setUpDeactivateConsultant();
         getUiRoot().getChildren().add(initial);
 
-        //Todo; add part that creates login based on created consultant with default password 0000
         //Todo; set up Create Project, Edit Project and Edit Consultant
 
         //for edit consultant create an option to load current info based on ID
@@ -47,11 +46,6 @@ public class Admin extends Program {
 
         initial.getChildren().add(deactivateConsultant);
         //endregion
-    }
-
-    private void changeView(Group currentGroup,Group targetGroup){
-        getUiRoot().getChildren().remove(currentGroup);
-        getUiRoot().getChildren().add(targetGroup);
     }
 
     private void setUpCreateConsultant(){
@@ -159,6 +153,44 @@ public class Admin extends Program {
         //endregion
     }
 
+    private void setUpDeactivateConsultant(){
+
+        //region back button
+        Button back = new Button();
+        FXControls.setButton(back,20,20,"back");
+        back.setOnAction(event -> changeView(deactivateConsultantGroup,initial));
+        deactivateConsultantGroup.getChildren().add(back);
+        //endregion
+
+        //region IDInput field
+        TextField IDInput  = new TextField();
+        FXControls.setPosition(IDInput,120,150);
+        IDInput.setPromptText("Input Username/ConsultantID");
+
+        deactivateConsultantGroup.getChildren().add(IDInput);
+        //endregion
+
+        //region deactivate button
+        Button deactivateButton = new Button();
+        FXControls.setButton(deactivateButton,300,300,"Deactivate");
+        deactivateButton.setOnAction(event -> deactivateConsultantHandler(IDInput.getText()));
+        deactivateConsultantGroup.getChildren().add(deactivateButton);
+        //endregion
+
+
+
+        //engine for searching for Consultants, search criteria being name, last name or user ID
+        //clicking on Consultant puts them in focus displaying extra details and grabbing a hold of them
+        //deactivation prompt admin password, upon correct enter it changes the Consultant's status to inactive and refreshes the list
+    }
+
+
+    private void changeView(Group currentGroup,Group targetGroup){
+        getUiRoot().getChildren().remove(currentGroup);
+        getUiRoot().getChildren().add(targetGroup);
+    }
+
+
     private void generateID(String name, int PomodoroDuration, int shortBreakDuration, int LongBreakDuration) throws SQLException {
        boolean done = false;
        int i = 0;
@@ -194,42 +226,11 @@ public class Admin extends Program {
         return fNameInput.getText()+" "+lNameInput.getText();
     }
 
-    private void setUpDeactivateConsultant(){
-
-        //region back button
-        Button back = new Button();
-        FXControls.setButton(back,20,20,"back");
-        back.setOnAction(event -> changeView(deactivateConsultantGroup,initial));
-        deactivateConsultantGroup.getChildren().add(back);
-        //endregion
-
-        //region IDInput field
-        TextField IDInput  = new TextField();
-        FXControls.setPosition(IDInput,120,150);
-        IDInput.setPromptText("Input Username/ConsultantID");
-
-        deactivateConsultantGroup.getChildren().add(IDInput);
-        //endregion
-
-        //region deactivate button
-        Button deactivateButton = new Button();
-        FXControls.setButton(deactivateButton,300,300,"Deactivate");
-        deactivateButton.setOnAction(event -> deactivateConsultantHandler(IDInput.getText()));
-        deactivateConsultantGroup.getChildren().add(deactivateButton);
-        //endregion
-
-
-
-    //engine for searching for Consultants, search criteria being name, last name or user ID
-    //clicking on Consultant puts them in focus displaying extra details and grabbing a hold of them
-    //deactivation prompt admin password, upon correct enter it changes the Consultant's status to inactive and refreshes the list
-}
 
     private void createConsultantHandler(String ID,String name, int pomodoroDur, int shortBreakDur, int longBreakDur) throws SQLException {
         Connection con = DB.getCon();
         SQLHandler.createConsultant(con,ID,name,pomodoroDur,shortBreakDur,longBreakDur);
         SQLHandler.createConsultantLogin(con,ID);
-        //fixme; put the login creation here?
         DB.closeCon();
     }
 

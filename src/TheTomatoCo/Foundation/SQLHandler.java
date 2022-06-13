@@ -176,4 +176,8 @@ public class SQLHandler {
         p.execute();
         p.close();
     }
+
+    //note for future, figure out how to sub-categorize these in a proper manner
+    // that manner being separable when running a command i.e.
+    // SQLHandler.Get.ProjectID(); for ease of search with more than 10 commands
 }
