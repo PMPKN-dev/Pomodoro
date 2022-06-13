@@ -24,6 +24,7 @@ public class Admin extends Program {
         setUpDeactivateConsultant();
         getUiRoot().getChildren().add(initial);
 
+        //Todo; add part that creates login based on created consultant with default password 0000
         //Todo; set up Create Project, Edit Project and Edit Consultant
 
         //for edit consultant create an option to load current info based on ID
@@ -225,15 +226,10 @@ public class Admin extends Program {
 }
 
     private void createConsultantHandler(String ID,String name, int pomodoroDur, int shortBreakDur, int longBreakDur) throws SQLException {
-        //todo; create a loop that generates a user ID based on fName-lName-No
-        //make a check for fName and lName based on previous users
-            //takes fName-lName-01 and checks for availability in database
-
-            //if available, uses it
-            //else fName-lName-++ until found
-        //displays final Username and creates login with given Username and password 0000
         Connection con = DB.getCon();
         SQLHandler.createConsultant(con,ID,name,pomodoroDur,shortBreakDur,longBreakDur);
+        SQLHandler.createConsultantLogin(con,ID);
+        //fixme; put the login creation here?
         DB.closeCon();
     }
 

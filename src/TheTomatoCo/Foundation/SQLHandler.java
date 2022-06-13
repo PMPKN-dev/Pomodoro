@@ -1,15 +1,8 @@
 package TheTomatoCo.Foundation;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
-import com.sun.prism.null3d.NULL3DPipeline;
-import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 
-import javax.xml.transform.Result;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class SQLHandler {
 
@@ -30,6 +23,7 @@ public class SQLHandler {
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
+        p.close();
         return rs.getString(1);
     }
 
@@ -114,6 +108,7 @@ public class SQLHandler {
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
+        p.close();
         return rs.getInt(1);
     }
 
@@ -123,6 +118,7 @@ public class SQLHandler {
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
+        p.close();
         return rs.getInt(1);
     }
 
@@ -132,6 +128,7 @@ public class SQLHandler {
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
+        p.close();
         return rs.getInt(1);
     }
 
@@ -141,6 +138,7 @@ public class SQLHandler {
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
+        p.close();
         return rs.getInt(1);
     }
 
@@ -148,20 +146,34 @@ public class SQLHandler {
         PreparedStatement p = con.prepareStatement("UPDATE tbl_StatusOfConsultant SET Status=0 WHERE ConsultantID=?");
         p.setString(1,ID);
         p.execute();
+        p.close();
     }
 
     public static boolean checkUsername(String ID) throws SQLException{
+        //gets the ID from parameter from database
         PreparedStatement p = DB.getCon().prepareStatement("SELECT ConsultantID FROM tbl_Consultant WHERE ConsultantID=?");
         p.setString(1,ID);
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
+        //tries to get a result from the result set
         try {
             rs.getString(1);
-            return true;
+            p.close();
+            return true; //if the given name is already in the database, returns true
         }
         catch (SQLServerException e){
-            return false;
+            p.close();
+            return false; //if the result comes back faulty, meaning that there is no result, it returns false
         }
+    }
+
+    public static void createConsultantLogin(Connection con, String ID) throws SQLException {
+        PreparedStatement p = con.prepareStatement("INSERT INTO tbl_Login VALUES (?,?,?)");
+        p.setString(1, ID);
+        p.setString(2,"0000");//default password
+        p.setInt(3,1);//creates consultant with perms level 1
+        p.execute();
+        p.close();
     }
 }
