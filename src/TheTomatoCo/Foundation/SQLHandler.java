@@ -1,5 +1,7 @@
 package TheTomatoCo.Foundation;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
+import com.sun.prism.null3d.NULL3DPipeline;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
@@ -11,13 +13,13 @@ import java.sql.SQLException;
 
 public class SQLHandler {
 
-    //TODO create a stored procedure for this
-    public static void createConsultant(Connection con, String consultantName, int pomodoroLength, int shortBreakLength, int longBreakLength) throws SQLException {
-        PreparedStatement p = con.prepareStatement("INSERT INTO tbl_Consultant values(?,?,?,?)");
-        p.setString(1, consultantName);
-        p.setInt(2,pomodoroLength);
-        p.setInt(3,shortBreakLength);
-        p.setInt(4,longBreakLength);
+    public static void createConsultant(Connection con,String ID, String consultantName, int pomodoroLength, int shortBreakLength, int longBreakLength) throws SQLException {
+        PreparedStatement p = con.prepareStatement("INSERT INTO tbl_Consultant values(?,?,?,?,?)");
+        p.setString(1,ID);
+        p.setString(2,consultantName);
+        p.setInt(3,pomodoroLength);
+        p.setInt(4,shortBreakLength);
+        p.setInt(5,longBreakLength);
         p.execute();
         p.close();
     }
@@ -93,7 +95,6 @@ public class SQLHandler {
 
     }
 
-
     public static void updateConsultant(Connection con, int pomodoroLength, int shortBreakLength, int longBreakLength, String ConsultantID) throws SQLException{
         PreparedStatement p = con.prepareStatement("UPDATE tbl_Consultant SET PomodoroTime = ?, PomodoroShortBreakTime = ?, PomodoroLongBreakTime = ? WHERE ConsultantID = ?");
         p.setInt(1,pomodoroLength);
@@ -115,6 +116,7 @@ public class SQLHandler {
         rs.next();
         return rs.getInt(1);
     }
+
     public static int setShortBreakTime(Connection con, String ConsultantID) throws SQLException{
         PreparedStatement p = con.prepareStatement("SELECT PomodoroShortBreakTime FROM tbl_Consultant WHERE ConsultantID = ?");
         p.setString(1,ConsultantID);
@@ -123,6 +125,7 @@ public class SQLHandler {
         rs.next();
         return rs.getInt(1);
     }
+
     public static int setLongBreakTime(Connection con, String ConsultantID) throws SQLException{
         PreparedStatement p = con.prepareStatement("SELECT PomodoroLongBreakTime FROM tbl_Consultant WHERE ConsultantID = ?");
         p.setString(1,ConsultantID);
@@ -145,5 +148,20 @@ public class SQLHandler {
         PreparedStatement p = con.prepareStatement("UPDATE tbl_StatusOfConsultant SET Status=0 WHERE ConsultantID=?");
         p.setString(1,ID);
         p.execute();
+    }
+
+    public static boolean checkUsername(String ID) throws SQLException{
+        PreparedStatement p = DB.getCon().prepareStatement("SELECT ConsultantID FROM tbl_Consultant WHERE ConsultantID=?");
+        p.setString(1,ID);
+        p.execute();
+        ResultSet rs = p.getResultSet();
+        rs.next();
+        try {
+            rs.getString(1);
+            return true;
+        }
+        catch (SQLServerException e){
+            return false;
+        }
     }
 }

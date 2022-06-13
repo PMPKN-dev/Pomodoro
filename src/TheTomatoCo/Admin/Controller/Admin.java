@@ -13,6 +13,8 @@ public class Admin extends Program {
     Group initial = new Group();
     Group createConsultantGroup = new Group();
     Group deactivateConsultantGroup = new Group();
+    TextField fNameInput;
+    TextField lNameInput;
 
     @Override
     public void expand(){
@@ -22,6 +24,9 @@ public class Admin extends Program {
         setUpDeactivateConsultant();
         getUiRoot().getChildren().add(initial);
 
+        //Todo; set up Create Project, Edit Project and Edit Consultant
+
+        //for edit consultant create an option to load current info based on ID
 
 
     }
@@ -58,7 +63,7 @@ public class Admin extends Program {
         //endregion
 
         //region fName field
-        TextField fNameInput  = new TextField();
+        fNameInput  = new TextField();
         FXControls.setPosition(fNameInput,40,80);
         fNameInput.setMaxWidth(120);
         fNameInput.setPromptText("First name");
@@ -67,7 +72,7 @@ public class Admin extends Program {
         //endregion
 
         //region lName field
-        TextField lNameInput  = new TextField();
+        lNameInput  = new TextField();
         FXControls.setPosition(lNameInput,170,80);
         lNameInput.setMaxWidth(120);
         lNameInput.setPromptText("Last name");
@@ -136,18 +141,16 @@ public class Admin extends Program {
         Button createButton = new Button();
         FXControls.setButton(createButton,150,230,"Create");
 
-        //concatenation kekw
-        String fullName = fNameInput.getText()+" "+lNameInput.getText();
-
         createButton.setOnAction(event -> {
             try {
-                createConsultantHandler(
-                        fullName,
+                generateID(
+                        getNameFormatted(),
                         (int) Double.parseDouble(PomodoroDurationInput.getText()),
                         (int) Double.parseDouble(shortBreakDurationInput.getText()),
                         (int) Double.parseDouble(longBreakDurationInput.getText())
                 );
-            } catch (SQLException e) {
+
+            } catch (NumberFormatException | SQLException e) {
                 e.printStackTrace();
             }
         });
@@ -155,7 +158,41 @@ public class Admin extends Program {
         //endregion
     }
 
-    //todo; create consultant deactivation (not deletion but change of status to inactive)
+    private void generateID(String name, int PomodoroDuration, int shortBreakDuration, int LongBreakDuration) throws SQLException {
+       boolean done = false;
+       int i = 0;
+        do{
+            String bufferedID= getName()+i;
+            System.out.println(bufferedID);
+
+            if(!SQLHandler.checkUsername(bufferedID)){
+                System.out.println("ID accepted: "+bufferedID);
+                createConsultantHandler(
+                        bufferedID,
+                        name,
+                        PomodoroDuration,
+                        shortBreakDuration,
+                        LongBreakDuration
+                );
+                done=true;
+            }
+            i++;
+            if(i>=999){
+                Text text = new Text();
+                FXControls.setTextNode(text,180,180,"Error, the given name combination of "+getName()+" exceeds the " +
+                        "numerical value limit of 999 for ID creation. Contact support.");
+            }
+        } while (!done);
+    }
+
+    private String getName(){
+        return fNameInput.getText()+lNameInput.getText();
+    }
+
+    private String getNameFormatted(){
+        return fNameInput.getText()+" "+lNameInput.getText();
+    }
+
     private void setUpDeactivateConsultant(){
 
         //region back button
@@ -187,15 +224,16 @@ public class Admin extends Program {
     //deactivation prompt admin password, upon correct enter it changes the Consultant's status to inactive and refreshes the list
 }
 
-    private void createConsultantHandler(String name, int pomodoroDur, int shortBreakDur, int longBreakDur) throws SQLException {
+    private void createConsultantHandler(String ID,String name, int pomodoroDur, int shortBreakDur, int longBreakDur) throws SQLException {
         //todo; create a loop that generates a user ID based on fName-lName-No
         //make a check for fName and lName based on previous users
             //takes fName-lName-01 and checks for availability in database
+
             //if available, uses it
             //else fName-lName-++ until found
         //displays final Username and creates login with given Username and password 0000
         Connection con = DB.getCon();
-        SQLHandler.createConsultant(con,name,pomodoroDur,shortBreakDur,longBreakDur);
+        SQLHandler.createConsultant(con,ID,name,pomodoroDur,shortBreakDur,longBreakDur);
         DB.closeCon();
     }
 
@@ -213,6 +251,9 @@ public class Admin extends Program {
         catch(SQLException s){
             s.printStackTrace();
             statusResult.setText("An error occurred. Ensure the ID is correct or that the user isn't already inactive");
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
