@@ -26,7 +26,7 @@ public class Admin extends Program {
 
         //Todo; set up Create Project, Edit Project and Edit Consultant
 
-        //for edit consultant create an option to load current info based on ID
+        //for edit consultant create the function to load current info based on ID
 
 
     }
@@ -182,6 +182,95 @@ public class Admin extends Program {
         //engine for searching for Consultants, search criteria being name, last name or user ID
         //clicking on Consultant puts them in focus displaying extra details and grabbing a hold of them
         //deactivation prompt admin password, upon correct enter it changes the Consultant's status to inactive and refreshes the list
+    }
+
+    private void setUpEditConsultant(){
+
+        //region back button
+        Button back = new Button();
+        FXControls.setButton(back,20,20,"back");
+        //back.setOnAction(event -> changeView(,initial));
+        //todo; add correct group
+        //todo; add button to correct group (currently this group does not exist
+        //endregion
+
+        //region UserID textField
+        //endregion
+
+        //region loadInfo button
+        //endregion
+
+
+        //region fName
+        //endregion
+
+        //region lName
+        //endregion
+
+        //region PomodoroTime
+        //endregion
+
+        //region shortBreakTime
+        //endregion
+
+        //region longBreakTime
+        //endregion
+
+        //region UserID
+        //endregion
+
+        //region userPassword
+        //endregion
+
+        //region userPermissionLevel
+        //endregion
+
+
+    }
+
+    private void setUpCreateProject(){
+
+        //region back button
+        Button back = new Button();
+        FXControls.setButton(back,20,20,"back");
+        //back.setOnAction(event -> changeView(,initial));
+        //todo; add correct group
+        //todo; add button to correct group (currently this group does not exist
+        //endregion
+
+        //region ProjectID
+        //endregion
+
+        //region ProjectName
+        //endregion
+
+        //region ProjectDuration
+        //endregion
+
+    }
+
+    private void setUpEditProject(){
+
+        //region back button
+        Button back = new Button();
+        FXControls.setButton(back,20,20,"back");
+        //back.setOnAction(event -> changeView(,initial));
+        //todo; add correct group
+        //todo; add button to correct group (currently this group does not exist
+        //endregion
+
+        //region oldProjectID
+        //endregion
+
+        //region newProjectID (by default copied from old)
+        //endregion
+
+        //region ProjectName
+        //endregion
+
+        //region ProjectDuration
+        //endregion
+
     }
 
 
