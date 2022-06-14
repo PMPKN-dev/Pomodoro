@@ -23,12 +23,16 @@ public class FXControls {
 
     public static void setTextNode(TextField textNode, int x, int y, String text){
         setPosition(textNode,x,y);
-        textNode.setText(text);
+        textNode.setPromptText(text);
     }
 
     public static void setTextNode(Label textNode, int x, int y, String text){
         setPosition(textNode,x,y);
         textNode.setText(text);
+    }
+
+    public static void under(Node under, Node over, int spacing){
+        under.setLayoutY(over.getLayoutY()+spacing);
     }
 
 }

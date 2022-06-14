@@ -53,34 +53,6 @@ public class Login extends Program {
         pass.setLayoutY(250);
         initialScreen.getChildren().add(pass);
 
-        //region obolete login check
-        /*
-        PreparedStatement ps;
-        ResultSet rs;
-        String userName = id.getText();
-        String password = pass.getText();
-
-        String query = "SELECT * FROM Users WHERE userName=? AND userPass=?"; //DB not created yet, values may change
-
-        try{
-            ps = DB.getCon().prepareStatement(query);
-            ps.setString(1,userName);
-            ps.setString(2,password);
-            rs = ps.executeQuery();
-
-            if(rs.next()){
-                //enter pomodoro
-            }else{
-                //TODO: prevent entering
-                id.setText("");
-                pass.setText("");
-            }
-
-        }catch(SQLException ex){
-        }
-         */
-         //endregion
-
         Button login = new Button();
         FXControls.setButton(login,200,150,"Log in");
         initialScreen.getChildren().add(login);
@@ -108,7 +80,6 @@ public class Login extends Program {
 
             if (Objects.equals(result, userPass)) {
                 LoginErrorText.setText("");
-                //make login work/ make it open the hub program here
                 launchHub();
                 setUserData();
                 System.out.println("Login success");
@@ -139,8 +110,14 @@ public class Login extends Program {
         stage.show();
     }
     private void setUserData(){
-        /*todo; make it send info Somewhere:tm: that keeps hold of it (probably the Program's UIRoot) and from there have it
-        todo; display proper information in the top right corner at all times
+        /*todo; make this call a method in the super class that loads info based on the current login
+        something like:
+        super.setData(id.getText());
+        which then in the super does:
+        sqlhandler.getPermission
+        and
+        sqlhandler.getName (of sorts)
+        and places those into the text box
          */
     }
 }

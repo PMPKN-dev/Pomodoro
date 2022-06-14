@@ -1,23 +1,18 @@
 package TheTomatoCo.Foundation;
 
-import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 
-import javax.xml.transform.Result;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class SQLHandler {
 
-    //TODO create a stored procedure for this
-    public static void createConsultant(Connection con, String consultantName, int pomodoroLength, int shortBreakLength, int longBreakLength) throws SQLException {
-        PreparedStatement p = con.prepareStatement("INSERT INTO tbl_Consultant values(?,?,?,?)");
-        p.setString(1, consultantName);
-        p.setInt(2,pomodoroLength);
-        p.setInt(3,shortBreakLength);
-        p.setInt(4,longBreakLength);
+    public static void createConsultant(Connection con,String ID, String consultantName, int pomodoroLength, int shortBreakLength, int longBreakLength) throws SQLException {
+        PreparedStatement p = con.prepareStatement("INSERT INTO tbl_Consultant values(?,?,?,?,?)");
+        p.setString(1,ID);
+        p.setString(2,consultantName);
+        p.setInt(3,pomodoroLength);
+        p.setInt(4,shortBreakLength);
+        p.setInt(5,longBreakLength);
         p.execute();
         p.close();
     }
@@ -28,6 +23,7 @@ public class SQLHandler {
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
+        p.close();
         return rs.getString(1);
     }
 
@@ -93,7 +89,6 @@ public class SQLHandler {
 
     }
 
-
     public static void updateConsultant(Connection con, int pomodoroLength, int shortBreakLength, int longBreakLength, String ConsultantID) throws SQLException{
         PreparedStatement p = con.prepareStatement("UPDATE tbl_Consultant SET PomodoroTime = ?, PomodoroShortBreakTime = ?, PomodoroLongBreakTime = ? WHERE ConsultantID = ?");
         p.setInt(1,pomodoroLength);
@@ -113,22 +108,27 @@ public class SQLHandler {
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
+        p.close();
         return rs.getInt(1);
     }
+
     public static int setShortBreakTime(Connection con, String ConsultantID) throws SQLException{
         PreparedStatement p = con.prepareStatement("SELECT PomodoroShortBreakTime FROM tbl_Consultant WHERE ConsultantID = ?");
         p.setString(1,ConsultantID);
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
+        p.close();
         return rs.getInt(1);
     }
+
     public static int setLongBreakTime(Connection con, String ConsultantID) throws SQLException{
         PreparedStatement p = con.prepareStatement("SELECT PomodoroLongBreakTime FROM tbl_Consultant WHERE ConsultantID = ?");
         p.setString(1,ConsultantID);
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
+        p.close();
         return rs.getInt(1);
     }
 
@@ -138,6 +138,7 @@ public class SQLHandler {
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
+        p.close();
         return rs.getInt(1);
     }
 
@@ -145,5 +146,38 @@ public class SQLHandler {
         PreparedStatement p = con.prepareStatement("UPDATE tbl_StatusOfConsultant SET Status=0 WHERE ConsultantID=?");
         p.setString(1,ID);
         p.execute();
+        p.close();
     }
+
+    public static boolean checkUsername(String ID) throws SQLException{
+        //gets the ID from parameter from database
+        PreparedStatement p = DB.getCon().prepareStatement("SELECT ConsultantID FROM tbl_Consultant WHERE ConsultantID=?");
+        p.setString(1,ID);
+        p.execute();
+        ResultSet rs = p.getResultSet();
+        rs.next();
+        //tries to get a result from the result set
+        try {
+            rs.getString(1);
+            p.close();
+            return true; //if the given name is already in the database, returns true
+        }
+        catch (SQLServerException e){
+            p.close();
+            return false; //if the result comes back faulty, meaning that there is no result, it returns false
+        }
+    }
+
+    public static void createConsultantLogin(Connection con, String ID) throws SQLException {
+        PreparedStatement p = con.prepareStatement("INSERT INTO tbl_Login VALUES (?,?,?)");
+        p.setString(1, ID);
+        p.setString(2,"0000");//default password
+        p.setInt(3,1);//creates consultant with perms level 1
+        p.execute();
+        p.close();
+    }
+
+    //note for future, figure out how to sub-categorize these in a proper manner
+    // that manner being separable when running a command i.e.
+    // SQLHandler.Get.ProjectID(); for ease of search with more than 10 commands
 }
