@@ -13,8 +13,13 @@ public class Admin extends Program {
     Group initial = new Group();
     Group createConsultantGroup = new Group();
     Group deactivateConsultantGroup = new Group();
+    Group editConsultantGroup = new Group();
+    Group createProjectGroup = new Group();
+    Group editProjectGroup = new Group();
     TextField fNameInput;
     TextField lNameInput;
+    int spacing = 20; // spacing between the TextFields for use with te FXControls.Under() method
+
 
     @Override
     public void expand(){
@@ -46,6 +51,8 @@ public class Admin extends Program {
 
         initial.getChildren().add(deactivateConsultant);
         //endregion
+
+        //todo; add the new buttons!!!
     }
 
     private void setUpCreateConsultant(){
@@ -186,43 +193,71 @@ public class Admin extends Program {
 
     private void setUpEditConsultant(){
 
-        //region back button
+
+        //region back Button
         Button back = new Button();
         FXControls.setButton(back,20,20,"back");
-        //back.setOnAction(event -> changeView(,initial));
-        //todo; add correct group
-        //todo; add button to correct group (currently this group does not exist
+        back.setOnAction(event -> changeView(editConsultantGroup,initial));
+        editConsultantGroup.getChildren().add(back);
         //endregion
 
-        //region UserID textField
+        //region UserID TextField
+        TextField userIDinitial = new TextField();
+        FXControls.setTextNode(userIDinitial,50,50,"enter the ID for editing");
+        editConsultantGroup.getChildren().add(userIDinitial);
         //endregion
 
-        //region loadInfo button
+        //region grab data button
+        //todo; make this button grab all the old data from the database and into an array and then set the following fields
+        //todo; with data from said array
         //endregion
 
-
-        //region fName
+        //region fName TextField
+        TextField fName = new TextField();
+        FXControls.under(fName,userIDinitial,spacing);
+        editConsultantGroup.getChildren().add(fName);
         //endregion
 
-        //region lName
+        //region lName TextField
+        TextField lName = new TextField();
+        FXControls.under(lName,fName,spacing);
+        editConsultantGroup.getChildren().add(lName);
         //endregion
 
-        //region PomodoroTime
+        //region PomodoroTime TextField
+        TextField PomodoroTime = new TextField();
+        FXControls.under(PomodoroTime,lName,spacing);
+        editConsultantGroup.getChildren().add(PomodoroTime);
         //endregion
 
-        //region shortBreakTime
+        //region shortBreakTime TextField
+        TextField shortBreakTime = new TextField();
+        FXControls.under(shortBreakTime,PomodoroTime,spacing);
+        editConsultantGroup.getChildren().add(shortBreakTime);
         //endregion
 
-        //region longBreakTime
+        //region longBreakTime TextField
+        TextField longBreakTime = new TextField();
+        FXControls.under(longBreakTime,shortBreakTime,spacing);
+        editConsultantGroup.getChildren().add(longBreakTime);
         //endregion
 
-        //region UserID
+        //region UserID TextField
+        TextField UserIDedit = new TextField();
+        FXControls.setPosition(UserIDedit,200,50);
+        editConsultantGroup.getChildren().add(UserIDedit);
         //endregion
 
-        //region userPassword
+        //region userPassword PasswordField
+        PasswordField userPassword = new PasswordField();
+        FXControls.under(userPassword,UserIDedit,spacing);
+        editConsultantGroup.getChildren().add(userPassword);
         //endregion
 
-        //region userPermissionLevel
+        //region userPermissionLevel TextField
+        TextField userPermissionLevel = new TextField();
+        FXControls.under(userPermissionLevel,userPassword,spacing);
+        editConsultantGroup.getChildren().add(userPermissionLevel);
         //endregion
 
 
@@ -233,9 +268,8 @@ public class Admin extends Program {
         //region back button
         Button back = new Button();
         FXControls.setButton(back,20,20,"back");
-        //back.setOnAction(event -> changeView(,initial));
-        //todo; add correct group
-        //todo; add button to correct group (currently this group does not exist
+        back.setOnAction(event -> changeView(createProjectGroup,initial));
+        createProjectGroup.getChildren().add(back);
         //endregion
 
         //region ProjectID
@@ -254,12 +288,16 @@ public class Admin extends Program {
         //region back button
         Button back = new Button();
         FXControls.setButton(back,20,20,"back");
-        //back.setOnAction(event -> changeView(,initial));
-        //todo; add correct group
-        //todo; add button to correct group (currently this group does not exist
+        back.setOnAction(event -> changeView(editProjectGroup,initial));
+        editProjectGroup.getChildren().add(back);
         //endregion
 
         //region oldProjectID
+        //endregion
+
+        //region grab data button
+        //todo; make this button grab all the old data from the database and into an array and then set the following fields
+        //todo; with data from said array
         //endregion
 
         //region newProjectID (by default copied from old)
