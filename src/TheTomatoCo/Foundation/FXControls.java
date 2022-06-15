@@ -33,6 +33,7 @@ public class FXControls {
 
     public static void under(Node under, Node over, int spacing){
         under.setLayoutY(over.getLayoutY()+spacing);
+        under.setLayoutX(over.getLayoutX());
     }
 
 }
