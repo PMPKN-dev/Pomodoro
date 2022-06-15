@@ -11,13 +11,13 @@ CREATE TABLE tbl_Consultant(
 	PomodoroLongBreakTime int);
 
 CREATE TABLE tbl_Project(
-	ProjectID int PRIMARY KEY,
+	ProjectID VARCHAR(30) PRIMARY KEY,
 	ProjectName VARCHAR(30),
 	ProjectDuration float
 );
 
 CREATE TABLE tbl_ActiveProjects(
-	ProjectID int,
+	ProjectID VARCHAR(30),
 	FOREIGN KEY(ProjectID) REFERENCES tbl_Project(ProjectID),
 	ConsultantID VARCHAR(30),
 	FOREIGN KEY(ConsultantID) REFERENCES tbl_Consultant(ConsultantID)

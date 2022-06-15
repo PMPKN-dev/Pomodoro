@@ -19,7 +19,7 @@ public class Admin extends Program {
     Group editProjectGroup = new Group();
     TextField fNameInput;
     TextField lNameInput;
-    int spacing = 20; // spacing between the TextFields for use with te FXControls.Under() method
+    int spacing = 35; // spacing between the TextFields for use with te FXControls.Under() method
     LoginData LoginID = LoginData.getInstance();
 
 
@@ -29,32 +29,62 @@ public class Admin extends Program {
         setUpInitial();
         setUpCreateConsultant();
         setUpDeactivateConsultant();
+        setUpEditConsultant();
+        setUpCreateProject();
+        setUpEditProject();
         getUiRoot().getChildren().add(initial);
-
         //Todo; set up Create Project, Edit Project and Edit Consultant
-
         //for edit consultant create the function to load current info based on ID
         super.userNameText.setText(LoginID.getUserID()+"");
+
 
     }
 
     private void setUpInitial(){
 
-        //region buttons for changing views
+        //region createConsultant Button
         Button createConsultant = new Button();
         FXControls.setButton(createConsultant,100,100,"Create Consultant");
         createConsultant.setOnAction(event -> changeView(initial,createConsultantGroup));
 
         initial.getChildren().add(createConsultant);
+        //endregion
 
+        //region deactivateConsultant Button
         Button deactivateConsultant = new Button();
-        FXControls.setButton(deactivateConsultant,100,135,"Deactivate Consultant");
+        FXControls.under(deactivateConsultant,createConsultant,spacing);
+        deactivateConsultant.setText("Deactivate Consultant");
         deactivateConsultant.setOnAction(event -> changeView(initial,deactivateConsultantGroup));
 
         initial.getChildren().add(deactivateConsultant);
         //endregion
 
-        //todo; add the new buttons!!!
+        //region editConsultant Button
+        Button editConsultant = new Button();
+        FXControls.under(editConsultant,deactivateConsultant,spacing);
+        editConsultant.setText("Edit Consultant");
+        editConsultant.setOnAction(event -> changeView(initial,editConsultantGroup));
+
+        initial.getChildren().add(editConsultant);
+        //endregion
+
+        //region createProject Button
+        Button createProject = new Button();
+        FXControls.under(createProject,editConsultant,spacing);
+        createProject.setText("Create Project");
+        createProject.setOnAction(event -> changeView(initial,createProjectGroup));
+
+        initial.getChildren().add(createProject);
+        //endregion
+
+        //region deactivateConsultant Button
+        Button editProject = new Button();
+        FXControls.under(editProject,createProject,spacing);
+        editProject.setText("Edit Project");
+        editProject.setOnAction(event -> changeView(initial,editProjectGroup));
+
+        initial.getChildren().add(editProject);
+        //endregion
     }
 
     private void setUpCreateConsultant(){
@@ -205,63 +235,103 @@ public class Admin extends Program {
 
         //region UserID TextField
         TextField userIDinitial = new TextField();
-        FXControls.setTextNode(userIDinitial,50,50,"enter the ID for editing");
+        FXControls.setTextNode(userIDinitial,40,80,"enter the ID for editing");
         editConsultantGroup.getChildren().add(userIDinitial);
         //endregion
 
         //region grab data button
+        Button grabData = new Button();
+        FXControls.setButton(grabData,230,80,"Grab data");
+        editConsultantGroup.getChildren().add(grabData);
         //todo; make this button grab all the old data from the database and into an array and then set the following fields
         //todo; with data from said array
         //endregion
 
         //region fName TextField
         TextField fName = new TextField();
-        FXControls.under(fName,userIDinitial,spacing);
+        FXControls.under(fName,userIDinitial,50);
+        fName.setPromptText("First Name");
         editConsultantGroup.getChildren().add(fName);
         //endregion
 
         //region lName TextField
         TextField lName = new TextField();
         FXControls.under(lName,fName,spacing);
+        lName.setPromptText("Last Name");
         editConsultantGroup.getChildren().add(lName);
         //endregion
 
         //region PomodoroTime TextField
         TextField PomodoroTime = new TextField();
         FXControls.under(PomodoroTime,lName,spacing);
+
+        PomodoroTime.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) { //takes the vale of the field and if it is not a Decimal Integer ->
+                PomodoroTime.setText(newValue.replaceAll("[^\\d]", "")); //it replaces ever non-Decimal-integer with a blank field
+            }
+        });
+        PomodoroTime.setTooltip(new Tooltip("Pomodoro duration"));
+
         editConsultantGroup.getChildren().add(PomodoroTime);
         //endregion
 
         //region shortBreakTime TextField
         TextField shortBreakTime = new TextField();
         FXControls.under(shortBreakTime,PomodoroTime,spacing);
+
+        shortBreakTime.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) { //takes the vale of the field and if it is not a Decimal Integer ->
+                shortBreakTime.setText(newValue.replaceAll("[^\\d]", "")); //it replaces ever non-Decimal-integer with a blank field
+            }
+        });
+        shortBreakTime.setTooltip(new Tooltip("Short break duration"));
+
         editConsultantGroup.getChildren().add(shortBreakTime);
         //endregion
 
         //region longBreakTime TextField
         TextField longBreakTime = new TextField();
         FXControls.under(longBreakTime,shortBreakTime,spacing);
+
+        longBreakTime.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) { //takes the vale of the field and if it is not a Decimal Integer ->
+                longBreakTime.setText(newValue.replaceAll("[^\\d]", "")); //it replaces ever non-Decimal-integer with a blank field
+            }
+        });
+        longBreakTime.setTooltip(new Tooltip("Long break duration"));
+
         editConsultantGroup.getChildren().add(longBreakTime);
         //endregion
 
         //region UserID TextField
-        TextField UserIDedit = new TextField();
-        FXControls.setPosition(UserIDedit,200,50);
-        editConsultantGroup.getChildren().add(UserIDedit);
+        TextField UserIDEdit = new TextField();
+        FXControls.setPosition(UserIDEdit,250,130);
+        UserIDEdit.setPromptText("User ID");
+        editConsultantGroup.getChildren().add(UserIDEdit);
         //endregion
 
         //region userPassword PasswordField
         PasswordField userPassword = new PasswordField();
-        FXControls.under(userPassword,UserIDedit,spacing);
+        FXControls.under(userPassword,UserIDEdit,spacing);
+        userPassword.setPromptText("User Password");
         editConsultantGroup.getChildren().add(userPassword);
         //endregion
 
         //region userPermissionLevel TextField
         TextField userPermissionLevel = new TextField();
         FXControls.under(userPermissionLevel,userPassword,spacing);
+        userPermissionLevel.setPromptText("User Permission Level");
         editConsultantGroup.getChildren().add(userPermissionLevel);
         //endregion
 
+        //region updateData Button
+        Button updateData = new Button();
+        FXControls.under(updateData,longBreakTime,spacing);
+        updateData.setText("Update Data");
+        editConsultantGroup.getChildren().add(updateData);
+        //todo; make a Button that updates the data at target ID (being the one i the old ID field used to find the data)
+        //todo; to all the data input in the further ones
+        //endregion
 
     }
 
@@ -274,18 +344,56 @@ public class Admin extends Program {
         createProjectGroup.getChildren().add(back);
         //endregion
 
-        //region ProjectID
+        //region projectID TextField
+        TextField projectID = new TextField();
+        FXControls.setTextNode(projectID,40,80,"enter new ProjectID");
+        createProjectGroup.getChildren().add(projectID);
         //endregion
 
-        //region ProjectName
+        //region projectName TextField
+        TextField projectName = new TextField();
+        FXControls.under(projectName,projectID,spacing);
+        projectName.setPromptText("Enter new project Name");
+        createProjectGroup.getChildren().add(projectName);
         //endregion
 
-        //region ProjectDuration
+        //region ProjectDuration TextField
+        TextField projectDuration = new TextField();
+        FXControls.under(projectDuration,projectName,spacing);
+
+        projectDuration.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) { //takes the vale of the field and if it is not a Decimal Integer ->
+                projectDuration.setText(newValue.replaceAll("[^\\d]", "")); //it replaces ever non-Decimal-integer with a blank field
+            }
+        });
+        projectDuration.setTooltip(new Tooltip("Project Duration"));
+
+        createProjectGroup.getChildren().add(projectDuration);
+        //endregion
+
+        //region CreateProject button
+        Button createProject = new Button();
+        FXControls.under(createProject,projectDuration,spacing);
+        createProject.setText("Create Project");
+
+        createProject.setOnAction(event -> createProjectHandler(
+                projectID.getText(),
+                projectName.getText(),
+                (int) Double.parseDouble(projectDuration.getText())
+        ));
+        //FIXME; the Database has a sub-optimal specification for the project ID
+
+        createProjectGroup.getChildren().add(createProject);
         //endregion
 
     }
 
     private void setUpEditProject(){
+
+        /*
+        yes, yes, yes, duplicate code and whatnot. this stays duplicate though until someone finds a convenient way
+        to have one node in two Groups without the whole thing going mad
+         */
 
         //region back button
         Button back = new Button();
@@ -295,20 +403,55 @@ public class Admin extends Program {
         //endregion
 
         //region oldProjectID
+        TextField oldProjectID = new TextField();
+        FXControls.setTextNode(oldProjectID,40,80,"enter old ProjectID");
+        editProjectGroup.getChildren().add(oldProjectID);
         //endregion
 
         //region grab data button
+        Button grabData = new Button();
+        FXControls.setButton(grabData,230,80,"Grab data");
+        editProjectGroup.getChildren().add(grabData);
         //todo; make this button grab all the old data from the database and into an array and then set the following fields
         //todo; with data from said array
         //endregion
 
         //region newProjectID (by default copied from old)
+        TextField newProjectID = new TextField();
+        FXControls.under(newProjectID,oldProjectID,50);
+        newProjectID.setPromptText("Project ID");
+        editProjectGroup.getChildren().add(newProjectID);
         //endregion
 
         //region ProjectName
+        TextField projectName = new TextField();
+        FXControls.under(projectName,newProjectID,spacing);
+        projectName.setPromptText("Project Name");
+        editProjectGroup.getChildren().add(projectName);
         //endregion
 
         //region ProjectDuration
+        TextField projectDuration = new TextField();
+        FXControls.under(projectDuration,projectName,spacing);
+
+        projectDuration.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) { //takes the vale of the field and if it is not a Decimal Integer ->
+                projectDuration.setText(newValue.replaceAll("[^\\d]", "")); //it replaces ever non-Decimal-integer with a blank field
+            }
+        });
+
+        projectDuration.setPromptText("Project duration");
+
+        editProjectGroup.getChildren().add(projectDuration);
+        //endregion
+
+        //region updateData Button
+        Button updateData = new Button();
+        FXControls.under(updateData,projectDuration,spacing);
+        updateData.setText("Update Data");
+        editProjectGroup.getChildren().add(updateData);
+        //todo; make a Button that updates the data at target ID (being the one i the old ID field used to find the data)
+        //todo; to all the data input in the further ones
         //endregion
 
     }
@@ -355,6 +498,47 @@ public class Admin extends Program {
         return fNameInput.getText()+" "+lNameInput.getText();
     }
 
+
+    private void editConsultantGrabHandler(){
+        //order of op:
+        /*
+        run a SQL statement to get all info for selected ID and put said info into a String[]
+        use the String[] to put info into corresponding textFields
+         */
+    }
+
+    private void editConsultantUpdateHandler(){
+        //order of op:
+        /*
+        grab all the info from the textFields and run an SQL statement based on the old ID in which you update the entries to the new info
+         */
+    }
+
+    private void createProjectHandler(String ID, String Name, int Duration){
+        Connection con = DB.getCon();
+        try {
+            SQLHandler.createProject(con, ID, Name, Duration);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    //has to wait for clarification of ProjectID
+    private void editProjectGrabHandler(){
+        //order of op:
+        /*
+        run a SQL statement to get all info for selected ID and put said info into a String[]
+        use the String[] to put info into corresponding textFields
+         */
+    }
+
+    //has to wait for clarification of ProjectID
+    private void editProjectUpdateHandler(){
+        //order of op:
+        /*
+        grab all the info from the textFields and run an SQL statement based on the old ID in which you update the entries to the new info
+         */
+    }
 
     private void createConsultantHandler(String ID,String name, int pomodoroDur, int shortBreakDur, int longBreakDur) throws SQLException {
         Connection con = DB.getCon();

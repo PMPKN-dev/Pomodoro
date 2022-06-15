@@ -177,6 +177,15 @@ public class SQLHandler {
         p.close();
     }
 
+    public static void createProject(Connection con, String ID, String Name, int Duration) throws SQLException {
+        PreparedStatement p = con.prepareStatement("INSERT INTO tbl_Project VALUES (?,?,?)");
+        p.setString(1,ID);
+        p.setString(2,Name);
+        p.setInt(3,Duration);
+        p.execute();
+        p.close();
+    }
+
     //note for future, figure out how to sub-categorize these in a proper manner
     // that manner being separable when running a command i.e.
     // SQLHandler.Get.ProjectID(); for ease of search with more than 10 commands
