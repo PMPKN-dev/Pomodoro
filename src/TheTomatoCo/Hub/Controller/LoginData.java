@@ -2,18 +2,18 @@ package TheTomatoCo.Hub.Controller;
 
 public class LoginData {
     private static LoginData instance = new LoginData();
-    private int UserID = 0;
+    private String UserID = "";
     private int PermissionLvl = 0;
 
     private LoginData(){
 
     }
 
-    public int getUserID() {
+    public String getUserID() {
         return UserID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(String userID) {
         UserID = userID;
     }
 
