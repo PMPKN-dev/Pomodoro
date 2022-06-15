@@ -85,7 +85,7 @@ public class Login extends Program {
 
             if (Objects.equals(result, userPass)) {
                 LoginErrorText.setText("");
-                LoginID.setUserID(Integer.parseInt(userName));
+                LoginID.setUserID(userName);
                 LoginID.setPermissionLvl(PermissionLvl);
                 launchHub();
                 setUserData();

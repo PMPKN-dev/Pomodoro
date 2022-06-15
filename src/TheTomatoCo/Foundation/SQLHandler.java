@@ -78,9 +78,9 @@ public class SQLHandler {
         return ID;
     }
 
-    public static void createTask(Connection con, int ConsultantID, int ProjectID, String TaskName, int AssignedPomodoros) throws SQLException {
+    public static void createTask(Connection con, String ConsultantID, int ProjectID, String TaskName, int AssignedPomodoros) throws SQLException {
         PreparedStatement p = con.prepareStatement("Insert into tbl_Tasks values(?,?,?,?,0)");
-        p.setInt(1, ConsultantID);
+        p.setString(1, ConsultantID);
         p.setInt(2,ProjectID);
         p.setString(3,TaskName);
         p.setInt(4,AssignedPomodoros);
