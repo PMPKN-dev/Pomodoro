@@ -518,6 +518,7 @@ public class Admin extends Program {
         }
     }
 
+    //has to wait for clarification of ProjectID
     private void editProjectGrabHandler(){
         //order of op:
         /*
@@ -526,6 +527,7 @@ public class Admin extends Program {
          */
     }
 
+    //has to wait for clarification of ProjectID
     private void editProjectUpdateHandler(){
         //order of op:
         /*
