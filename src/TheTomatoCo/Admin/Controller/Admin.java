@@ -1,6 +1,7 @@
 package TheTomatoCo.Admin.Controller;
 
 import TheTomatoCo.Foundation.*;
+import TheTomatoCo.Hub.Controller.LoginData;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
@@ -19,6 +20,7 @@ public class Admin extends Program {
     TextField fNameInput;
     TextField lNameInput;
     int spacing = 35; // spacing between the TextFields for use with te FXControls.Under() method
+    LoginData LoginID = LoginData.getInstance();
 
 
     @Override
@@ -31,6 +33,9 @@ public class Admin extends Program {
         setUpCreateProject();
         setUpEditProject();
         getUiRoot().getChildren().add(initial);
+        //Todo; set up Create Project, Edit Project and Edit Consultant
+        //for edit consultant create the function to load current info based on ID
+        super.userNameText.setText(LoginID.getUserID()+"");
 
 
     }

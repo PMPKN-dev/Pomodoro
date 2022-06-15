@@ -45,8 +45,10 @@ CREATE TABLE tbl_Login(
 CREATE TABLE tbl_Tasks(
 	ConsultantID VARCHAR(30),
 	FOREIGN KEY(ConsultantID) REFERENCES tbl_Consultant(ConsultantID),
+	ProjectID int,
+	TaskName NCHAR(55),
 	AssignedPomodoros int,
-	CompletedOrNot BIT,
-	TaskName NCHAR(55)
+	CompletedOrNot BIT
+
 );
 

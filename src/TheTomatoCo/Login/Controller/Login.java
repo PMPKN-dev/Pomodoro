@@ -5,12 +5,15 @@ import TheTomatoCo.Foundation.FXControls;
 import TheTomatoCo.Foundation.Program;
 import TheTomatoCo.Foundation.SQLHandler;
 import TheTomatoCo.Hub.Controller.Hub;
+import TheTomatoCo.Hub.Controller.LoginData;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import sun.rmi.runtime.Log;
 
 import java.sql.SQLException;
 import java.util.Objects;
@@ -22,6 +25,7 @@ public class Login extends Program {
     TextField id;
     PasswordField pass;
     Text LoginErrorText;
+    LoginData LoginID = LoginData.getInstance();
 
 
     @Override
@@ -73,6 +77,7 @@ public class Login extends Program {
     public void loginCheckHandler(String userName, String userPass) {
 
         try {
+            int PermissionLvl = SQLHandler.VerifyLogin(DB.getCon(),userPass,userName);
             String result = SQLHandler.checkLogin(
                     DB.getCon(),
                     userName
@@ -80,9 +85,12 @@ public class Login extends Program {
 
             if (Objects.equals(result, userPass)) {
                 LoginErrorText.setText("");
+                LoginID.setUserID(Integer.parseInt(userName));
+                LoginID.setPermissionLvl(PermissionLvl);
                 launchHub();
                 setUserData();
                 System.out.println("Login success");
+
             } else {
                 LoginErrorText.setText("Password is incorrect");
                 pass.setText("");
@@ -110,6 +118,7 @@ public class Login extends Program {
         stage.show();
     }
     private void setUserData(){
+
         /*todo; make this call a method in the super class that loads info based on the current login
         something like:
         super.setData(id.getText());
