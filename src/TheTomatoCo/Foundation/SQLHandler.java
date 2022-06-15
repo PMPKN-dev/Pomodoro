@@ -186,6 +186,45 @@ public class SQLHandler {
         p.close();
     }
 
+    /**
+     * Returns a String Array with all the data about the Consultant<br>
+     * Outputs data in following indexing: <br>
+     * 0=ID <br> 1=Name <br> 2=Pomodoro <br> 3=ShortBreak <br> 4=LongBreak
+     * @param con connection to DB
+     * @param ID Target consulant ID
+     * @return String[] of all consultant data
+     * @throws SQLException SQLException
+     */
+    public static String[] grabConsultantData(Connection con, String ID) throws SQLException {
+        PreparedStatement p = con.prepareStatement("SELECT * FROM tbl_Consultant WHERE ConsultantID=?");
+        p.setString(1,ID);
+        p.executeQuery();
+        ResultSet rs = p.getResultSet();
+        rs.next();
+        String[] output = new String[5];
+        //FIXME; probably don't need the ID
+        output[0] = rs.getString(1); //ID
+        output[1] = rs.getString(2); //Name
+        output[2] = String.valueOf(rs.getInt(3)); //Pomodoro time
+        output[3] = String.valueOf(rs.getInt(4)); //Short Break time
+        output[4] = String.valueOf(rs.getInt(5)); //Long Break time
+        return output;
+    }
+
+    public static String[] grabLoginData(Connection con, String ID) throws SQLException{
+        PreparedStatement p = con.prepareStatement("SELECT * FROM tbl_Login WHERE ConsultantID=?");
+        p.setString(1,ID);
+        p.executeQuery();
+        ResultSet rs = p.getResultSet();
+        rs.next();
+        String[] output = new String[3];
+        //FIXME; probably don't need the ID
+        output[0] = rs.getString(1); //ID
+        output[1] = rs.getString(2); //Password
+        output[2] = rs.getString(3); //PermLevel
+        return output;
+    }
+
     //note for future, figure out how to sub-categorize these in a proper manner
     // that manner being separable when running a command i.e.
     // SQLHandler.Get.ProjectID(); for ease of search with more than 10 commands

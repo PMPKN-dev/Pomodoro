@@ -243,6 +243,9 @@ public class Admin extends Program {
         //region grab data button
         Button grabData = new Button();
         FXControls.setButton(grabData,230,80,"Grab data");
+
+        grabData.setOnAction(event -> editConsultantGrabHandler(userID.getText()));
+
         editConsultantGroup.getChildren().add(grabData);
         //todo; make this button grab all the old data from the database and into an array and then set the following fields
         //todo; with data from said array
@@ -381,7 +384,7 @@ public class Admin extends Program {
 
         //region Confirmation Text
         confirmation = new Text();
-        FXControls.under(confirmation,createProject,spacing);
+        FXControls.under(confirmation,createProject,55);
 
         createProjectGroup.getChildren().add(confirmation);
         //endregion
@@ -500,6 +503,16 @@ public class Admin extends Program {
 
     private void editConsultantGrabHandler(String ID){
         //String[] values = SQLHandler.grabConsultantData(ID);
+
+        //region grabData
+
+        //endregion
+
+        //region setData
+        //endregion
+
+
+
 
         //order of op:
         /*
