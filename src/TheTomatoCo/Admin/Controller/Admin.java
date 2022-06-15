@@ -32,8 +32,6 @@ public class Admin extends Program {
         setUpEditProject();
         getUiRoot().getChildren().add(initial);
 
-        //for edit consultant create the function to load current info based on ID
-
 
     }
 
@@ -363,6 +361,7 @@ public class Admin extends Program {
                 projectDuration.setText(newValue.replaceAll("[^\\d]", "")); //it replaces ever non-Decimal-integer with a blank field
             }
         });
+        projectDuration.setTooltip(new Tooltip("Project Duration"));
 
         createProjectGroup.getChildren().add(projectDuration);
         //endregion
@@ -371,8 +370,15 @@ public class Admin extends Program {
         Button createProject = new Button();
         FXControls.under(createProject,projectDuration,spacing);
         createProject.setText("Create Project");
+
+        createProject.setOnAction(event -> createProjectHandler(
+                projectID.getText(),
+                projectName.getText(),
+                (int) Double.parseDouble(projectDuration.getText())
+        ));
+        //FIXME; the Database has a sub-optimal specification for the project ID
+
         createProjectGroup.getChildren().add(createProject);
-        //todo; make this button insert a project into the projects table
         //endregion
 
     }
@@ -487,6 +493,45 @@ public class Admin extends Program {
         return fNameInput.getText()+" "+lNameInput.getText();
     }
 
+
+    private void editConsultantGrabHandler(){
+        //order of op:
+        /*
+        run a SQL statement to get all info for selected ID and put said info into a String[]
+        use the String[] to put info into corresponding textFields
+         */
+    }
+
+    private void editConsultantUpdateHandler(){
+        //order of op:
+        /*
+        grab all the info from the textFields and run an SQL statement based on the old ID in which you update the entries to the new info
+         */
+    }
+
+    private void createProjectHandler(String ID, String Name, int Duration){
+        Connection con = DB.getCon();
+        try {
+            SQLHandler.createProject(con, ID, Name, Duration);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void editProjectGrabHandler(){
+        //order of op:
+        /*
+        run a SQL statement to get all info for selected ID and put said info into a String[]
+        use the String[] to put info into corresponding textFields
+         */
+    }
+
+    private void editProjectUpdateHandler(){
+        //order of op:
+        /*
+        grab all the info from the textFields and run an SQL statement based on the old ID in which you update the entries to the new info
+         */
+    }
 
     private void createConsultantHandler(String ID,String name, int pomodoroDur, int shortBreakDur, int longBreakDur) throws SQLException {
         Connection con = DB.getCon();
