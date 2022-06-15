@@ -6,6 +6,7 @@ import TheTomatoCo.Foundation.Program;
 
 import TheTomatoCo.Foundation.SQLHandler;
 import TheTomatoCo.Hub.Controller.LoginData;
+import TheTomatoCo.Login.Controller.Login;
 import com.sun.javafx.webkit.theme.RenderThemeImpl;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -20,16 +21,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DoToday extends Program {
-    LoginData LoginID = LoginData.getInstance();
     String selectedProject;
     int ID = 0;
     Connection con = DB.getCon();
     Button createTask = new Button();
     ListView doTodayList = new ListView<>();
-
+    LoginData LoginID = LoginData.getInstance();
+    ComboBox sortbyProject = new ComboBox();
 
     @Override
     public void expand() {
+        doTodayList.setPrefHeight(370);
         Grouping();
         initialize();
         createTask.setOnAction(event -> {
@@ -37,12 +39,13 @@ public class DoToday extends Program {
             Stage primaryStage = new Stage();
             AnchorPane taskPane;
             taskPane = new AnchorPane();
-            Scene scene = new Scene(taskPane, 200, 400);
+            Scene scene = new Scene(taskPane, 200, 150);
             primaryStage.setResizable(false);
             primaryStage.setScene(scene);
             primaryStage.setTitle(this.getClass().getSimpleName());
             primaryStage.show();
             VBox Vbox = new VBox();
+            Vbox.setSpacing(10);
             HBox HBox = new HBox();
 
             TextField TaskName = new TextField();
@@ -62,6 +65,7 @@ public class DoToday extends Program {
                 selectedProject = SelectProject.getSelectionModel().getSelectedItem().toString();
                 try {
                     ID = SQLHandler.getProjectID(con,selectedProject);
+
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -71,22 +75,35 @@ public class DoToday extends Program {
             Create.setText("Create Task");
             Create.setPrefWidth(155);
             Create.setOnAction(event1 -> {
-
                 try {
-                    System.out.println((int) Double.parseDouble(String.valueOf(Pomodoros.getText())));
                     SQLHandler.createTask(con,LoginID.getUserID(),ID,TaskName.getText(),(int) Double.parseDouble(String.valueOf(Pomodoros.getText())));
                     doTodayList.getItems().add(TaskName.getText());
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             });
-
             HBox.getChildren().addAll(Pomodoros,Create);
             Vbox.getChildren().addAll(TaskName,SelectProject,HBox);
             taskPane.getChildren().add(Vbox);
-
-
         });
+        sortbyProject.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            String selectedProject = sortbyProject.getSelectionModel().getSelectedItem()+"";
+            doTodayList.getItems().clear();
+            try {
+                ListViewFiller(doTodayList,"select TaskName from tbl_Tasks where ProjectID = (select ProjectID from tbl_Project where ProjectName = '"+selectedProject+"');");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if(selectedProject.equals("All")){
+                doTodayList.getItems().clear();
+                try {
+                    ListViewFiller(doTodayList,"Select TaskName from tbl_Tasks where ConsultantID ="+LoginID.getUserID());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
     private void initialize(){
         try {
@@ -94,7 +111,12 @@ public class DoToday extends Program {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        try{
+            ComboBoxFiller(sortbyProject,"Select ProjectName from tbl_Project");
+            sortbyProject.getItems().add("All");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void Grouping() {
@@ -102,18 +124,10 @@ public class DoToday extends Program {
         HBox createFinish = new HBox();
         VBox doTodayView = new VBox();
 
-        ComboBox sortbyProject = new ComboBox();
-        sortbyProject.setPromptText("Sort by Project");
-        try{
-            ComboBoxFiller(sortbyProject,"Select ProjectName from tbl_Project");
-            sortbyProject.getItems().add("All");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
 
+        sortbyProject.setPromptText("Sort by Project");
         Button finishTask = new Button();
         finishTask.setText("Finish task");
-
         createTask.setText("Create new task");
 
 
@@ -135,6 +149,7 @@ public class DoToday extends Program {
         }while(true);
         p.close();
     }
+
     private void ListViewFiller(ListView<String> ListView, String query) throws SQLException {
         PreparedStatement p = con.prepareStatement(query);
         ResultSet rs = p.executeQuery();

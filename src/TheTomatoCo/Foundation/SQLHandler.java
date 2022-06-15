@@ -20,11 +20,11 @@ public class SQLHandler {
     public static String checkLogin(Connection con, String ConsultantID) throws SQLException {
         PreparedStatement p = con.prepareStatement("SELECT Password FROM tbl_Login WHERE ConsultantID=?");
         p.setString(1,ConsultantID);
-        p.execute();
-        ResultSet rs = p.getResultSet();
+        ResultSet rs = p.executeQuery();
         rs.next();
+        String theresult = rs.getString(1);
         p.close();
-        return rs.getString(1);
+        return theresult;
     }
 
     public static int GetConsultantID(Connection con, String Username) throws SQLException{
@@ -79,7 +79,7 @@ public class SQLHandler {
     }
 
     public static void createTask(Connection con, int ConsultantID, int ProjectID, String TaskName, int AssignedPomodoros) throws SQLException {
-        PreparedStatement p = con.prepareStatement("Insert into tbl_Tasks values(?,?,?,?)");
+        PreparedStatement p = con.prepareStatement("Insert into tbl_Tasks values(?,?,?,?,0)");
         p.setInt(1, ConsultantID);
         p.setInt(2,ProjectID);
         p.setString(3,TaskName);

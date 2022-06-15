@@ -35,7 +35,7 @@ public class Hub extends Program {
         launchPackage(admin);
     }
 
-    //Lanches a package with the given name and program
+    //Launches a package with the given name and program
     private void launchPackage(Program program){
         Stage stage = new Stage();
         program.start(stage);

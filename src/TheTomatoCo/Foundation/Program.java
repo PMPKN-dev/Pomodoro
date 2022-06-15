@@ -1,5 +1,6 @@
 package TheTomatoCo.Foundation;
 
+import TheTomatoCo.Hub.Controller.LoginData;
 import javafx.application.*;
 import javafx.event.*;
 import javafx.scene.*;
@@ -22,9 +23,16 @@ import java.util.Objects;
  */
 public class Program extends Application {
 
+    LoginData LoginID = LoginData.getInstance();
     Group defaults = new Group();
     public Group userInfo = new Group();
     AnchorPane uiRoot = new AnchorPane();
+    public Label userNameLabel = new Label();
+    public Label userStatusLabel = new Label();
+    public Text userNameText = new Text();
+
+    public Text userStatusText = new Text();
+
 
     /**
      * A method for getting the AnchorPane/Parent of the current Program Application
@@ -61,21 +69,22 @@ public class Program extends Application {
         userInfo.getChildren().add(userInfoBackground);
         //endregion
 
-        Label userNameLabel = new Label();
+
         FXControls.setTextNode(userNameLabel,405,5,"Logged in as: ");
         userInfo.getChildren().add(userNameLabel);
 
-        Label userStatusLabel = new Label();
+
         FXControls.setTextNode(userStatusLabel,405,45,"With Permission level: ");
         userInfo.getChildren().add(userStatusLabel);
 
-        Text userNameText = new Text();
-        FXControls.setTextNode(userNameText,405,40,"Unknown");
+
+        FXControls.setTextNode(userNameText,405,40,LoginID.getUserID()+"");
         userInfo.getChildren().add(userNameText);
 
-        Text userStatusText = new Text();
-        FXControls.setTextNode(userStatusText,405,80,"Undefined");
+
+        FXControls.setTextNode(userStatusText,405,80,LoginID.getPermissionLvl()+"");
         userInfo.getChildren().add(userStatusText);
+
     }
 
 
@@ -83,7 +92,7 @@ public class Program extends Application {
         uiRoot = new AnchorPane();
         uiRoot.getChildren().addAll(defaults,userInfo);
         Scene scene = new Scene(uiRoot, 600, 400);
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         primaryStage.setScene(scene);
         aProgramInitialize(scene);
         primaryStage.setTitle(this.getClass().getSimpleName());
@@ -100,4 +109,5 @@ public class Program extends Application {
         text.setText("Looks like you did not @Override the expand() method");
         defaults.getChildren().add(text);
     }
+
 }

@@ -1,6 +1,7 @@
 package TheTomatoCo.Pomodoro.Controller;
 
 import TheTomatoCo.Foundation.*;
+import TheTomatoCo.Hub.Controller.LoginData;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -54,7 +55,7 @@ public class Pomodoro extends Program {
     private String minutes_string = String.format("%02d", minutes);
     Connection con = DB.getCon();
     //endregion
-
+    LoginData LoginID = LoginData.getInstance();
     @Override
     public void expand() {
 
@@ -64,7 +65,7 @@ public class Pomodoro extends Program {
             e.printStackTrace();
         }
         setUpTimerSettings();
-
+        super.userNameText.setText(LoginID.getUserID()+"");
     }
 
     private void setUpTimer() throws SQLException {
