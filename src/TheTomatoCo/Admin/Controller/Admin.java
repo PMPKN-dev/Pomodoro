@@ -19,6 +19,7 @@ public class Admin extends Program {
     Group editProjectGroup = new Group();
     TextField fNameInput;
     TextField lNameInput;
+    Text confirmation;
     int spacing = 35; // spacing between the TextFields for use with te FXControls.Under() method
     LoginData LoginID = LoginData.getInstance();
 
@@ -234,9 +235,9 @@ public class Admin extends Program {
         //endregion
 
         //region UserID TextField
-        TextField userIDinitial = new TextField();
-        FXControls.setTextNode(userIDinitial,40,80,"enter the ID for editing");
-        editConsultantGroup.getChildren().add(userIDinitial);
+        TextField userID = new TextField();
+        FXControls.setTextNode(userID,40,80,"enter the ID for editing");
+        editConsultantGroup.getChildren().add(userID);
         //endregion
 
         //region grab data button
@@ -249,7 +250,7 @@ public class Admin extends Program {
 
         //region fName TextField
         TextField fName = new TextField();
-        FXControls.under(fName,userIDinitial,50);
+        FXControls.under(fName,userID,50);
         fName.setPromptText("First Name");
         editConsultantGroup.getChildren().add(fName);
         //endregion
@@ -303,17 +304,10 @@ public class Admin extends Program {
         editConsultantGroup.getChildren().add(longBreakTime);
         //endregion
 
-        //region UserID TextField
-        TextField UserIDEdit = new TextField();
-        FXControls.setPosition(UserIDEdit,250,130);
-        UserIDEdit.setPromptText("User ID");
-        editConsultantGroup.getChildren().add(UserIDEdit);
-        //endregion
 
         //region userPassword PasswordField
         PasswordField userPassword = new PasswordField();
-        FXControls.under(userPassword,UserIDEdit,spacing);
-        userPassword.setPromptText("User Password");
+        FXControls.setTextNode(userPassword,250,130,"User Password");
         editConsultantGroup.getChildren().add(userPassword);
         //endregion
 
@@ -381,11 +375,16 @@ public class Admin extends Program {
                 projectName.getText(),
                 (int) Double.parseDouble(projectDuration.getText())
         ));
-        //FIXME; the Database has a sub-optimal specification for the project ID
 
         createProjectGroup.getChildren().add(createProject);
         //endregion
 
+        //region Confirmation Text
+        confirmation = new Text();
+        FXControls.under(confirmation,createProject,spacing);
+
+        createProjectGroup.getChildren().add(confirmation);
+        //endregion
     }
 
     private void setUpEditProject(){
@@ -499,7 +498,9 @@ public class Admin extends Program {
     }
 
 
-    private void editConsultantGrabHandler(){
+    private void editConsultantGrabHandler(String ID){
+        //String[] values = SQLHandler.grabConsultantData(ID);
+
         //order of op:
         /*
         run a SQL statement to get all info for selected ID and put said info into a String[]
@@ -507,7 +508,7 @@ public class Admin extends Program {
          */
     }
 
-    private void editConsultantUpdateHandler(){
+    private void editConsultantUpdateHandler(String oldID, int Pomodoro, int shortBreak, int longBreak){
         //order of op:
         /*
         grab all the info from the textFields and run an SQL statement based on the old ID in which you update the entries to the new info
@@ -518,12 +519,13 @@ public class Admin extends Program {
         Connection con = DB.getCon();
         try {
             SQLHandler.createProject(con, ID, Name, Duration);
+            confirmation.setText("Project Created Successfully");
         } catch (SQLException e){
             e.printStackTrace();
+            confirmation.setText("An error occurred. Check input and try again");
         }
     }
 
-    //has to wait for clarification of ProjectID
     private void editProjectGrabHandler(){
         //order of op:
         /*
@@ -532,7 +534,6 @@ public class Admin extends Program {
          */
     }
 
-    //has to wait for clarification of ProjectID
     private void editProjectUpdateHandler(){
         //order of op:
         /*
