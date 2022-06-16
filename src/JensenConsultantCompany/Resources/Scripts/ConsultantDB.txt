@@ -1,0 +1,53 @@
+CREATE DATABASE ConsultantDB
+GO
+USE ConsultantDB
+
+
+CREATE TABLE tbl_Consultant(
+	ConsultantID VARCHAR(30) PRIMARY KEY,
+	ConsultantName VARCHAR(30),
+	PomodoroTime int,
+	PomodoroShortBreakTime int,
+	PomodoroLongBreakTime int);
+
+CREATE TABLE tbl_Project(
+	ProjectID VARCHAR(30) PRIMARY KEY,
+	ProjectName VARCHAR(30),
+	ProjectDuration float
+);
+
+CREATE TABLE tbl_ActiveProjects(
+	ProjectID int,
+	FOREIGN KEY(ProjectID) REFERENCES tbl_Project(ProjectID),
+	ConsultantID VARCHAR(30),
+	FOREIGN KEY(ConsultantID) REFERENCES tbl_Consultant(ConsultantID)
+);
+
+CREATE TABLE tbl_Pomodoro(
+	PomodoroID int PRIMARY KEY,
+	ConsultantID VARCHAR(30),
+	FOREIGN KEY(ConsultantID) REFERENCES tbl_Consultant(ConsultantID),
+);
+
+CREATE TABLE tbl_StatusOfConsultant(
+	ConsultantID VARCHAR(30),
+	FOREIGN KEY(ConsultantID) REFERENCES tbl_Consultant(ConsultantID),
+	Status BIT
+);
+
+CREATE TABLE tbl_Login(
+	ConsultantID VARCHAR(30),
+	FOREIGN KEY(ConsultantID) REFERENCES tbl_Consultant(ConsultantID),
+	Password VARCHAR(30),
+	PermissionLevel int
+);
+
+CREATE TABLE tbl_Tasks(
+	ConsultantID VARCHAR(30),
+	FOREIGN KEY(ConsultantID) REFERENCES tbl_Consultant(ConsultantID),
+	AssignedPomodoros int,
+	CompletedOrNot BIT,
+	TaskName NCHAR(55),
+
+);
+
