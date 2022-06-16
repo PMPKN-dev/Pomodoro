@@ -185,6 +185,17 @@ public class SQLHandler {
         p.execute();
         p.close();
     }
+    public static String getAssignedPomodoros(Connection con, String TaskName, String ConsultantID) throws SQLException{
+        PreparedStatement p = con.prepareStatement("select AssignedPomodoros from tbl_Tasks where TaskName = ? and ConsultantID = ?;");
+        p.setString(1,TaskName);
+        p.setString(2,ConsultantID);
+        ResultSet rs = p.executeQuery();
+        rs.next();
+        String theresult = rs.getString(1);
+        p.close();
+        return theresult;
+
+    }
 
     //note for future, figure out how to sub-categorize these in a proper manner
     // that manner being separable when running a command i.e.
