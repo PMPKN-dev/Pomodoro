@@ -1,12 +1,15 @@
-#GridCanvasPomodoro {
-    -fx-background-color: lightblue;
-    -fx-alignment: center;
-    -fx-background-image: url(pomodoro.jpeg);
+.button{
+    -fx-border-width: 2;
+    -fx-border-color: blue;
+    -fx-text-alignment: Center;
+    -fx-text-fill: blue;
 }
 
-.GridCanvasPomodoro .Canvas{
-    -fx-background-color: lightblue;
-    -fx-alignment: center;
-    -fx-background-image: url(pomodoro.jpeg);
+.root{
+    -fx-background-color: #add8e6;
 }
 
+.text{
+    -fx-border-color: black;
+    -fx-border-width: 2;
+}
