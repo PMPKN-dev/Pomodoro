@@ -102,6 +102,30 @@ public class SQLHandler {
         p.close();
     }
 
+    public static void updateConsultant(Connection con, String ID,String Name, int pomodoro, int shortBreak, int longBreak, String password, int permissionLevel) throws SQLException {
+        PreparedStatement consultantEdit = con.prepareStatement(
+                "UPDATE tbl_Consultant " +
+                "SET ConsultantName=?, PomodoroTime=?, PomodoroShortBreakTime=?, PomodoroLongBreakTime=? " +
+                "WHERE ConsultantID=?");
+        consultantEdit.setString(1,Name);
+        consultantEdit.setInt(2,pomodoro);
+        consultantEdit.setInt(3,shortBreak);
+        consultantEdit.setInt(4,longBreak);
+        consultantEdit.setString(5,ID);
+        consultantEdit.executeUpdate();
+        consultantEdit.close();
+
+
+
+        PreparedStatement loginEdit = con.prepareStatement(
+                "UPDATE tbl_Login SET Password=?, PermissionLevel=? WHERE ConsultantID=?");
+        loginEdit.setString(1,password);
+        loginEdit.setInt(2,permissionLevel);
+        loginEdit.setString(3,ID);
+        loginEdit.executeUpdate();
+        loginEdit.close();
+    }
+
     public static int setPomodoroTime(Connection con, String ConsultantID) throws SQLException{
         PreparedStatement p = con.prepareStatement("SELECT PomodoroTime FROM tbl_Consultant WHERE ConsultantID = ?");
         p.setString(1,ConsultantID);
@@ -208,6 +232,8 @@ public class SQLHandler {
         output[2] = String.valueOf(rs.getInt(3)); //Pomodoro time
         output[3] = String.valueOf(rs.getInt(4)); //Short Break time
         output[4] = String.valueOf(rs.getInt(5)); //Long Break time
+        rs.close();
+        p.close();
         return output;
     }
 
@@ -222,6 +248,8 @@ public class SQLHandler {
         output[0] = rs.getString(1); //ID
         output[1] = rs.getString(2); //Password
         output[2] = rs.getString(3); //PermLevel
+        rs.close();
+        p.close();
         return output;
     }
 

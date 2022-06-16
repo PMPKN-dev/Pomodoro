@@ -8,7 +8,7 @@ public class Utility {
      * @param second second array to merge
      * @return a merged array consisting of First+Second
      */
-    public String[] arrayMerge(String[] first, String[] second){
+    public static String[] arrayMerge(String[] first, String[] second){
         int FAL = first.length;
         int SAL = second.length;
         String[] output = new String[FAL+SAL];

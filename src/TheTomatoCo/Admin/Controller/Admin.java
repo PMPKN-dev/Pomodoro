@@ -1,13 +1,19 @@
 package TheTomatoCo.Admin.Controller;
 
 import TheTomatoCo.Foundation.*;
+import TheTomatoCo.Foundation.Utility;
 import TheTomatoCo.Hub.Controller.LoginData;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
+import javafx.stage.Window;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public class Admin extends Program {
 
@@ -240,34 +246,17 @@ public class Admin extends Program {
         editConsultantGroup.getChildren().add(userID);
         //endregion
 
-        //region grab data button
-        Button grabData = new Button();
-        FXControls.setButton(grabData,230,80,"Grab data");
 
-        grabData.setOnAction(event -> editConsultantGrabHandler(userID.getText()));
-
-        editConsultantGroup.getChildren().add(grabData);
-        //todo; make this button grab all the old data from the database and into an array and then set the following fields
-        //todo; with data from said array
-        //endregion
-
-        //region fName TextField
-        TextField fName = new TextField();
-        FXControls.under(fName,userID,50);
-        fName.setPromptText("First Name");
-        editConsultantGroup.getChildren().add(fName);
-        //endregion
-
-        //region lName TextField
-        TextField lName = new TextField();
-        FXControls.under(lName,fName,spacing);
-        lName.setPromptText("Last Name");
-        editConsultantGroup.getChildren().add(lName);
+        //region Name TextField
+        TextField Name = new TextField();
+        FXControls.under(Name,userID,50);
+        Name.setPromptText("First Name");
+        editConsultantGroup.getChildren().add(Name);
         //endregion
 
         //region PomodoroTime TextField
         TextField PomodoroTime = new TextField();
-        FXControls.under(PomodoroTime,lName,spacing);
+        FXControls.under(PomodoroTime,Name,spacing);
 
         PomodoroTime.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) { //takes the vale of the field and if it is not a Decimal Integer ->
@@ -318,13 +307,64 @@ public class Admin extends Program {
         TextField userPermissionLevel = new TextField();
         FXControls.under(userPermissionLevel,userPassword,spacing);
         userPermissionLevel.setPromptText("User Permission Level");
+        userPermissionLevel.setTooltip(new Tooltip("Permission Level"));
         editConsultantGroup.getChildren().add(userPermissionLevel);
+        //endregion
+
+        //region Warning Text
+        Text warningText = new Text();
+        FXControls.under(warningText,userPermissionLevel,50);
+        warningText.setText("Warning: Once you click Update data the process \nis irreversible so ensure all input data is final");
+        editConsultantGroup.getChildren().add(warningText);
+        //endregion
+
+
+        //region grab data button
+        Button grabData = new Button();
+        FXControls.setButton(grabData,230,80,"Grab data");
+
+        //String[] data;
+
+        grabData.setOnAction(event -> {
+            try {
+                String[] data = editConsultantGrabHandler(userID.getText());
+
+                //region setData
+                Name.setText(data[1]);
+                PomodoroTime.setText(data[2]);
+                shortBreakTime.setText(data[3]);
+                longBreakTime.setText(data[4]);
+                userPassword.setText(data[6]);
+                userPermissionLevel.setText(data[7]);
+                //endregion
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
+        editConsultantGroup.getChildren().add(grabData);
         //endregion
 
         //region updateData Button
         Button updateData = new Button();
         FXControls.under(updateData,longBreakTime,spacing);
         updateData.setText("Update Data");
+        updateData.setOnAction(event -> {
+                    try {
+                        editConsultantUpdateHandler(
+                                userID.getText(),
+                                Name.getText(),
+                                (int) Double.parseDouble(PomodoroTime.getText()),
+                                (int) Double.parseDouble(shortBreakTime.getText()),
+                                (int) Double.parseDouble(longBreakTime.getText()),
+                                userPassword.getText(),
+                                (int) Double.parseDouble(userPermissionLevel.getText()));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+        );
         editConsultantGroup.getChildren().add(updateData);
         //todo; make a Button that updates the data at target ID (being the one i the old ID field used to find the data)
         //todo; to all the data input in the further ones
@@ -501,31 +541,21 @@ public class Admin extends Program {
     }
 
 
-    private void editConsultantGrabHandler(String ID){
-        //String[] values = SQLHandler.grabConsultantData(ID);
+    private String[] editConsultantGrabHandler(String ID) throws SQLException {
 
-        //region grabData
+        Connection con = DB.getCon();
 
-        //endregion
-
-        //region setData
-        //endregion
-
-
-
-
-        //order of op:
-        /*
-        run a SQL statement to get all info for selected ID and put said info into a String[]
-        use the String[] to put info into corresponding textFields
-         */
+        String[] Consultant = SQLHandler.grabConsultantData(con,ID);
+        String[] Login = SQLHandler.grabLoginData(con,ID);
+        String[] merged = Utility.arrayMerge(Consultant,Login);
+        return merged;
     }
 
-    private void editConsultantUpdateHandler(String oldID, int Pomodoro, int shortBreak, int longBreak){
-        //order of op:
-        /*
-        grab all the info from the textFields and run an SQL statement based on the old ID in which you update the entries to the new info
-         */
+    private void editConsultantUpdateHandler(String ID, String Name, int Pomodoro, int shortBreak, int longBreak, String password, int permissionLevel) throws SQLException {
+
+        Connection con = DB.getCon();
+        SQLHandler.updateConsultant(con, ID, Name, Pomodoro,shortBreak,longBreak,password,permissionLevel);
+        DB.closeCon();
     }
 
     private void createProjectHandler(String ID, String Name, int Duration){
