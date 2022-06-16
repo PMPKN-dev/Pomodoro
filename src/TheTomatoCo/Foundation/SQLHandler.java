@@ -78,9 +78,9 @@ public class SQLHandler {
         return ID;
     }
 
-    public static void createTask(Connection con, int ConsultantID, int ProjectID, String TaskName, int AssignedPomodoros) throws SQLException {
+    public static void createTask(Connection con, String ConsultantID, int ProjectID, String TaskName, int AssignedPomodoros) throws SQLException {
         PreparedStatement p = con.prepareStatement("Insert into tbl_Tasks values(?,?,?,?,0)");
-        p.setInt(1, ConsultantID);
+        p.setString(1, ConsultantID);
         p.setInt(2,ProjectID);
         p.setString(3,TaskName);
         p.setInt(4,AssignedPomodoros);
@@ -100,6 +100,30 @@ public class SQLHandler {
         p.setString(4,ConsultantID);
         p.executeUpdate();
         p.close();
+    }
+
+    public static void updateConsultant(Connection con, String ID,String Name, int pomodoro, int shortBreak, int longBreak, String password, int permissionLevel) throws SQLException {
+        PreparedStatement consultantEdit = con.prepareStatement(
+                "UPDATE tbl_Consultant " +
+                "SET ConsultantName=?, PomodoroTime=?, PomodoroShortBreakTime=?, PomodoroLongBreakTime=? " +
+                "WHERE ConsultantID=?");
+        consultantEdit.setString(1,Name);
+        consultantEdit.setInt(2,pomodoro);
+        consultantEdit.setInt(3,shortBreak);
+        consultantEdit.setInt(4,longBreak);
+        consultantEdit.setString(5,ID);
+        consultantEdit.executeUpdate();
+        consultantEdit.close();
+
+
+
+        PreparedStatement loginEdit = con.prepareStatement(
+                "UPDATE tbl_Login SET Password=?, PermissionLevel=? WHERE ConsultantID=?");
+        loginEdit.setString(1,password);
+        loginEdit.setInt(2,permissionLevel);
+        loginEdit.setString(3,ID);
+        loginEdit.executeUpdate();
+        loginEdit.close();
     }
 
     public static int setPomodoroTime(Connection con, String ConsultantID) throws SQLException{
@@ -183,6 +207,71 @@ public class SQLHandler {
         p.setString(2,Name);
         p.setInt(3,Duration);
         p.execute();
+        p.close();
+    }
+
+    /**
+     * Returns a String Array with all the data about the Consultant<br>
+     * Outputs data in following indexing: <br>
+     * 0=ID <br> 1=Name <br> 2=Pomodoro <br> 3=ShortBreak <br> 4=LongBreak
+     * @param con connection to DB
+     * @param ID Target consulant ID
+     * @return String[] of all consultant data
+     * @throws SQLException SQLException
+     */
+    public static String[] grabConsultantData(Connection con, String ID) throws SQLException {
+        PreparedStatement p = con.prepareStatement("SELECT * FROM tbl_Consultant WHERE ConsultantID=?");
+        p.setString(1,ID);
+        p.executeQuery();
+        ResultSet rs = p.getResultSet();
+        rs.next();
+        String[] output = new String[5];
+        output[0] = rs.getString(1); //ID
+        output[1] = rs.getString(2); //Name
+        output[2] = String.valueOf(rs.getInt(3)); //Pomodoro time
+        output[3] = String.valueOf(rs.getInt(4)); //Short Break time
+        output[4] = String.valueOf(rs.getInt(5)); //Long Break time
+        rs.close();
+        p.close();
+        return output;
+    }
+
+    public static String[] grabLoginData(Connection con, String ID) throws SQLException{
+        PreparedStatement p = con.prepareStatement("SELECT * FROM tbl_Login WHERE ConsultantID=?");
+        p.setString(1,ID);
+        p.executeQuery();
+        ResultSet rs = p.getResultSet();
+        rs.next();
+        String[] output = new String[3];
+        output[0] = rs.getString(1); //ID
+        output[1] = rs.getString(2); //Password
+        output[2] = rs.getString(3); //PermLevel
+        rs.close();
+        p.close();
+        return output;
+    }
+
+    public static String[] grabProjectData(Connection con, String ID) throws SQLException{
+        PreparedStatement p = con.prepareStatement("SELECT * FROM tbl_Project WHERE ProjectID = ?");
+        p.setString(1,ID);
+        p.executeQuery();
+        ResultSet rs = p.getResultSet();
+        rs.next();
+        String[] output= new String[3];
+        output[0] = rs.getString(1); //ID
+        output[1] = rs.getString(2); //Name
+        output[2] = String.valueOf(rs.getInt(3)); //Duration
+        rs.close();
+        p.close();
+        return output;
+    }
+
+    public static void updateProject(Connection con, String ID, String Name, int Duration) throws SQLException {
+        PreparedStatement p = con.prepareStatement("UPDATE tbl_Project SET ProjectName=?, ProjectDuration=? WHERE ProjectID=?");
+        p.setString(1,Name);
+        p.setInt(2,Duration);
+        p.setString(3,ID);
+        p.executeUpdate();
         p.close();
     }
 

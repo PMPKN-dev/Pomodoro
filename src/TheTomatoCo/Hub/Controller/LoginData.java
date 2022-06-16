@@ -2,23 +2,29 @@ package TheTomatoCo.Hub.Controller;
 
 public class LoginData {
     private static LoginData instance = new LoginData();
-    private int UserID = 0;
+    private String UserID = "";
     private int PermissionLvl = 0;
+    private String Permission = "";
 
     private LoginData(){
 
     }
 
-    public int getUserID() {
+    public String getUserID() {
         return UserID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(String userID) {
         UserID = userID;
     }
 
-    public int getPermissionLvl() {
-        return PermissionLvl;
+    public String getPermissionLvl() {
+        if(PermissionLvl==1){
+            Permission = "User";
+        }else if(PermissionLvl==2){
+            Permission = "Admin";
+        }
+        return Permission;
     }
 
     public void setPermissionLvl(int permissionLvl) {
