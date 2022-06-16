@@ -216,36 +216,11 @@ public class Pomodoro extends Program {
 
         //endregion
     }
-    private void formerRunTimer(){
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                    //timeLeft = (int) Double.parseDouble(timerLabel.getText());
-
-                    timeLeft--;
-                    seconds = timeLeft % 60; //Modulo gives the remainder
-                    minutes = (timeLeft / 60) % 60;
-
-                    /*
-                    //Making timer look pretty
-                    if(seconds < 10 && minutes < 10){ //if its 09:09, it knows to put 0 infront of the counters
-                        timerLabel.setText("0" + minutes + ":0" + seconds);
-                    }else if(minutes < 10){ //if its 09:15, it knows seconds is normal counter
-                        timerLabel.setText("0" + minutes + ":" + seconds);
-                    }else{
-                        timerLabel.setText(minutes + ":" + seconds); //If neither is below 10 in counter
-                    }
-
-                     */
-                });
-            }
-        },0,1000);
-    }
 
     private void alarm(){
-        sound = true;
+        if(timeLeft == 0){
+            sound = true;
+        }
     }
 
     private void setUpTimerSettings() {

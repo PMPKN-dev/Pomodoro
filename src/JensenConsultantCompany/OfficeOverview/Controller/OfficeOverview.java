@@ -9,7 +9,7 @@ public class OfficeOverview extends Program {
      * Overrides the expand within the Program Class
      */
     public void expand() {
-        
+
     }
 
 
