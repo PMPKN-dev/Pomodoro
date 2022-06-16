@@ -6,6 +6,11 @@ public class SyncIncrement implements Runnable{
     private int remainingTime;
     private Counter counter;
 
+    /**
+     * An attempt at the Clock, links with Counter Class
+     * @param counter counter
+     */
+
     public SyncIncrement(Counter counter){
         this.counter = counter;
     }

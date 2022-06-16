@@ -88,6 +88,10 @@ public class Program extends Application {
     }
 
 
+    /**
+     * A method for setting up the main GUI Screen
+     * @param primaryStage Stage
+     */
     public void start(Stage primaryStage) {
         uiRoot = new AnchorPane();
         uiRoot.getChildren().addAll(defaults,userInfo);

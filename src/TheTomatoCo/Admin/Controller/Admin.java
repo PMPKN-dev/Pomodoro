@@ -31,6 +31,9 @@ public class Admin extends Program {
 
 
     @Override
+    /**
+     * Overrides the expand within the Program Class
+     */
     public void expand(){
 
         setUpInitial();

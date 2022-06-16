@@ -74,6 +74,11 @@ public class Login extends Program {
 
     }
 
+    /**
+     * Method for checking if Login is correct
+     * @param userName The unique ConsultantID, ex: JohnAdams01
+     * @param userPass The unique Password
+     */
     public void loginCheckHandler(String userName, String userPass) {
 
         try {

@@ -15,21 +15,33 @@ public class Hub extends Program {
         initialize();
     }
 
+    /**
+     * Connects the individual program Pomodoro to the Hub
+     */
     public void startPomodoro(){
         Pomodoro pomodoro = new Pomodoro();
         launchPackage(pomodoro);
     }
 
+    /**
+     * Connects the individual program DoToday to the Hub
+     */
     public void startDoToday(){
         DoToday doToday = new DoToday();
         launchPackage(doToday);
     }
 
+    /**
+     * Connects the individual program OfficeOverview to the Hub
+     */
     public void startOfficeOverview(){
         OfficeOverview officeOverview = new OfficeOverview();
         launchPackage(officeOverview);
     }
 
+    /**
+     * Connects the individual program Admin to the Hub
+     */
     public void startAdmin(){
         Admin admin = new Admin();
         launchPackage(admin);

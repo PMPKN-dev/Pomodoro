@@ -55,7 +55,12 @@ public class Pomodoro extends Program {
     Connection con = DB.getCon();
     //endregion
     LoginData LoginID = LoginData.getInstance();
+
+
     @Override
+    /**
+     * Overrides the expand within the Program Class
+     */
     public void expand() {
 
         try {
@@ -186,15 +191,6 @@ public class Pomodoro extends Program {
                     timerLabel.setText(updatedPomodoro + ":" + seconds_string);
                     timeLeft = (int) Double.parseDouble(timerLabel.getText());
 
-                    /*
-                    if(seconds < 10){ //if its X:09, it knows to put 0 infront of the counter
-                        timerLabel.setText(updatedPomodoro + ":0" + seconds);
-                    }else{
-                        timerLabel.setText(updatedPomodoro + ":" + seconds); //If neither is below 10 in counter
-                    }
-
-
-                     */
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -257,7 +253,7 @@ public class Pomodoro extends Program {
             public void handle(ActionEvent actionEvent) {
                 //startTimer();
                 //runTimer();
-                formerRunTimer();
+                //formerRunTimer();
             }
         });
 
@@ -269,7 +265,7 @@ public class Pomodoro extends Program {
         timer.cancel();
     }
 
-    public void startTimer(){
+    private void startTimer(){
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0),e -> advanceDuration()),new KeyFrame(Duration.seconds(1)));
         timeline.setCycleCount(Animation.INDEFINITE);
         timerLabel.setText(timeline.toString());

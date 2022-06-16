@@ -30,6 +30,9 @@ public class DoToday extends Program {
     ComboBox sortbyProject = new ComboBox();
 
     @Override
+    /**
+     * Overrides the expand within the Program Class
+     */
     public void expand() {
         doTodayList.setPrefHeight(370);
         Grouping();
