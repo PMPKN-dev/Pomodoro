@@ -40,7 +40,6 @@ public class Admin extends Program {
         setUpCreateProject();
         setUpEditProject();
         getUiRoot().getChildren().add(initial);
-        //Todo; set up Create Project, Edit Project and Edit Consultant
         //for edit consultant create the function to load current info based on ID
         super.userNameText.setText(LoginID.getUserID()+"");
 
@@ -359,6 +358,11 @@ public class Admin extends Program {
                                 (int) Double.parseDouble(longBreakTime.getText()),
                                 userPassword.getText(),
                                 (int) Double.parseDouble(userPermissionLevel.getText()));
+
+                        Text confirmation = new Text();
+                        FXControls.setTextNode(confirmation,(int) updateData.getLayoutX()+120,(int) updateData.getLayoutY()+20,"Done!");
+                        editConsultantGroup.getChildren().add(confirmation);
+
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -366,8 +370,6 @@ public class Admin extends Program {
 
         );
         editConsultantGroup.getChildren().add(updateData);
-        //todo; make a Button that updates the data at target ID (being the one i the old ID field used to find the data)
-        //todo; to all the data input in the further ones
         //endregion
 
     }
@@ -444,30 +446,17 @@ public class Admin extends Program {
         editProjectGroup.getChildren().add(back);
         //endregion
 
-        //region oldProjectID
-        TextField oldProjectID = new TextField();
-        FXControls.setTextNode(oldProjectID,40,80,"enter old ProjectID");
-        editProjectGroup.getChildren().add(oldProjectID);
+        //region projectID
+        TextField projectID = new TextField();
+        FXControls.setTextNode(projectID,40,80,"enter old ProjectID");
+        editProjectGroup.getChildren().add(projectID);
         //endregion
 
-        //region grab data button
-        Button grabData = new Button();
-        FXControls.setButton(grabData,230,80,"Grab data");
-        editProjectGroup.getChildren().add(grabData);
-        //todo; make this button grab all the old data from the database and into an array and then set the following fields
-        //todo; with data from said array
-        //endregion
 
-        //region newProjectID (by default copied from old)
-        TextField newProjectID = new TextField();
-        FXControls.under(newProjectID,oldProjectID,50);
-        newProjectID.setPromptText("Project ID");
-        editProjectGroup.getChildren().add(newProjectID);
-        //endregion
 
         //region ProjectName
         TextField projectName = new TextField();
-        FXControls.under(projectName,newProjectID,spacing);
+        FXControls.under(projectName,projectID,spacing);
         projectName.setPromptText("Project Name");
         editProjectGroup.getChildren().add(projectName);
         //endregion
@@ -487,13 +476,42 @@ public class Admin extends Program {
         editProjectGroup.getChildren().add(projectDuration);
         //endregion
 
+        //region grab data button
+        Button grabData = new Button();
+        FXControls.setButton(grabData,230,80,"Grab data");
+        grabData.setOnAction(event -> {
+            try {
+                String[] data = editProjectGrabHandler(projectID.getText());
+                projectName.setText(data[1]);
+                projectDuration.setText(data[2]);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        editProjectGroup.getChildren().add(grabData);
+        //endregion
+
+
         //region updateData Button
         Button updateData = new Button();
         FXControls.under(updateData,projectDuration,spacing);
         updateData.setText("Update Data");
+        updateData.setOnAction(event -> {
+            try {
+                editProjectUpdateHandler(
+                        projectID.getText(),
+                        projectName.getText(),
+                        (int) Double.parseDouble(projectDuration.getText())
+                );
+
+                Text confirmation = new Text();
+                FXControls.setTextNode(confirmation,(int) updateData.getLayoutX()+120,(int) updateData.getLayoutY()+20,"Done!");
+                editProjectGroup.getChildren().add(confirmation);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
         editProjectGroup.getChildren().add(updateData);
-        //todo; make a Button that updates the data at target ID (being the one i the old ID field used to find the data)
-        //todo; to all the data input in the further ones
         //endregion
 
     }
@@ -547,12 +565,10 @@ public class Admin extends Program {
 
         String[] Consultant = SQLHandler.grabConsultantData(con,ID);
         String[] Login = SQLHandler.grabLoginData(con,ID);
-        String[] merged = Utility.arrayMerge(Consultant,Login);
-        return merged;
+        return Utility.arrayMerge(Consultant,Login);
     }
 
     private void editConsultantUpdateHandler(String ID, String Name, int Pomodoro, int shortBreak, int longBreak, String password, int permissionLevel) throws SQLException {
-
         Connection con = DB.getCon();
         SQLHandler.updateConsultant(con, ID, Name, Pomodoro,shortBreak,longBreak,password,permissionLevel);
         DB.closeCon();
@@ -569,19 +585,15 @@ public class Admin extends Program {
         }
     }
 
-    private void editProjectGrabHandler(){
-        //order of op:
-        /*
-        run a SQL statement to get all info for selected ID and put said info into a String[]
-        use the String[] to put info into corresponding textFields
-         */
+    private String[] editProjectGrabHandler(String ID) throws SQLException {
+        Connection con = DB.getCon();
+        return SQLHandler.grabProjectData(con,ID);
     }
 
-    private void editProjectUpdateHandler(){
-        //order of op:
-        /*
-        grab all the info from the textFields and run an SQL statement based on the old ID in which you update the entries to the new info
-         */
+    private void editProjectUpdateHandler(String ID, String Name, int Duration) throws SQLException {
+        Connection con = DB.getCon();
+        SQLHandler.updateProject(con, ID, Name, Duration);
+        DB.closeCon();
     }
 
     private void createConsultantHandler(String ID,String name, int pomodoroDur, int shortBreakDur, int longBreakDur) throws SQLException {

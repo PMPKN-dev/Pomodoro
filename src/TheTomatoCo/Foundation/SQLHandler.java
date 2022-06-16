@@ -226,7 +226,6 @@ public class SQLHandler {
         ResultSet rs = p.getResultSet();
         rs.next();
         String[] output = new String[5];
-        //FIXME; probably don't need the ID
         output[0] = rs.getString(1); //ID
         output[1] = rs.getString(2); //Name
         output[2] = String.valueOf(rs.getInt(3)); //Pomodoro time
@@ -244,13 +243,36 @@ public class SQLHandler {
         ResultSet rs = p.getResultSet();
         rs.next();
         String[] output = new String[3];
-        //FIXME; probably don't need the ID
         output[0] = rs.getString(1); //ID
         output[1] = rs.getString(2); //Password
         output[2] = rs.getString(3); //PermLevel
         rs.close();
         p.close();
         return output;
+    }
+
+    public static String[] grabProjectData(Connection con, String ID) throws SQLException{
+        PreparedStatement p = con.prepareStatement("SELECT * FROM tbl_Project WHERE ProjectID = ?");
+        p.setString(1,ID);
+        p.executeQuery();
+        ResultSet rs = p.getResultSet();
+        rs.next();
+        String[] output= new String[3];
+        output[0] = rs.getString(1); //ID
+        output[1] = rs.getString(2); //Name
+        output[2] = String.valueOf(rs.getInt(3)); //Duration
+        rs.close();
+        p.close();
+        return output;
+    }
+
+    public static void updateProject(Connection con, String ID, String Name, int Duration) throws SQLException {
+        PreparedStatement p = con.prepareStatement("UPDATE tbl_Project SET ProjectName=?, ProjectDuration=? WHERE ProjectID=?");
+        p.setString(1,Name);
+        p.setInt(2,Duration);
+        p.setString(3,ID);
+        p.executeUpdate();
+        p.close();
     }
 
     //note for future, figure out how to sub-categorize these in a proper manner
