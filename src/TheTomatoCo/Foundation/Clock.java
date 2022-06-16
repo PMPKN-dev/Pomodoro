@@ -1,18 +1,10 @@
 
 package TheTomatoCo.Foundation;
 
-import TheTomatoCo.Pomodoro.Controller.Pomodoro;
-import javafx.animation.KeyFrame;
+
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.scene.control.Label;
-import javafx.util.Duration;
-
-import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,6 +21,9 @@ public class Clock {
     private Timeline timeline;
     private int remainingTime;
 
+    /**
+     * Attempt at making the timer work
+     */
     public void run(){
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -54,6 +49,3 @@ public class Clock {
 
 }
 
-/**
- * Synchronized counter ca be updated using several threads
- */

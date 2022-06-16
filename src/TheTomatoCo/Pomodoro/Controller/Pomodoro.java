@@ -37,19 +37,15 @@ public class Pomodoro extends Program {
     Group timerSettingsGroup = new Group();
 
     //region Constants
-    private TextField userName, password;
-    private Button login, pauseButton, resumeButton = new Button();
+    private Button pauseButton, resumeButton = new Button();
     private Text pomodoroTimer, shortBreakTimer, longBreakTimer;
     private HBox timerOptionsContainer;
     private Label timerLabel = new Label();
     private Timer timer = new Timer();
     private boolean sound = true;
-    private boolean isRunning = false;
-    private int timeLeft1 = 60*25;
     private int timeLeft = 0;
     private int seconds = 0;
     private int minutes = 0;
-    private int current;
     private String seconds_string = String.format("%02d", seconds);
     private String minutes_string = String.format("%02d", minutes);
     Connection con = DB.getCon();
@@ -59,7 +55,7 @@ public class Pomodoro extends Program {
 
     @Override
     /**
-     * Overrides the expand within the Program Class
+     * Overrides the expand() within the Program Class
      */
     public void expand() {
 
@@ -106,80 +102,7 @@ public class Pomodoro extends Program {
 
 
         //endregion
-        //region setting up login
-        login = new Button();
-        FXControls.setButton(login, 400, 200, "Login to your Pomodoro");
-        timerGroup.getChildren().add(login);
-        login.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                //region setting up the popupwindow
-                final Stage popUp = new Stage();
-                popUp.initModality(Modality.APPLICATION_MODAL);
-                VBox popUpVbox = new VBox(20);
-                popUpVbox.getChildren().add(new Text("Login to your Pomodoro"));
-                Scene popUpScene = new Scene(popUpVbox, 300, 200);
-                popUp.setScene(popUpScene);
-                popUp.show();
-                //endregion
 
-                //region setting up the login confirmation
-                userName = new TextField();
-                userName.setPromptText("Username");
-                userName.setPrefWidth(10);
-                password = new TextField();
-                password.setPromptText("Password");
-                password.setPrefWidth(10);
-                Button login = new Button("Login");
-                popUpVbox.getChildren().addAll(userName, password, login);
-                login.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent mouseEvent) {
-                        try {
-                            int permLevel = SQLHandler.VerifyLogin(con, password.getText(), userName.getText());
-                            //region setting up a possible override of the Info Background
-                            Rectangle userInfoBackground = new Rectangle();
-                            FXControls.setPosition(userInfoBackground, 400, 0);
-                            userInfoBackground.setHeight(90);
-                            userInfoBackground.setWidth(198);
-                            userInfoBackground.setFill(Color.WHITE);
-                            userInfoBackground.setStroke(Color.BLACK);
-
-
-                            userInfo.getChildren().add(userInfoBackground);
-                            Label userNameLabel = new Label();
-                            FXControls.setTextNode(userNameLabel, 405, 5, "Logged in as: ");
-                            userInfo.getChildren().add(userNameLabel);
-                            Text userNameText = new Text();
-                            FXControls.setTextNode(userNameText, 405, 40, userName.getText());
-                            userInfo.getChildren().add(userNameText);
-                            Label userStatusLabel = new Label();
-                            FXControls.setTextNode(userStatusLabel, 405, 45, "With Permission level: ");
-                            userInfo.getChildren().add(userStatusLabel);
-                            Text userStatusText = new Text();
-                            //endregion
-                            if (permLevel == 1) { //1 = consultant
-
-                                FXControls.setTextNode(userStatusText, 405, 80, "Consultant");
-                            } else {
-
-                                FXControls.setTextNode(userStatusText, 405, 80, "Admin");
-                            }
-                            userInfo.getChildren().add(userStatusText);
-
-
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                        //TODO: Exit after login
-                        //
-                    }
-                });
-                //endregion
-            }
-        });
-
-        //endregion
 
         //region Switch to pomodoro timer updated through database
         pomodoroTimer.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -187,7 +110,7 @@ public class Pomodoro extends Program {
             public void handle(MouseEvent mouseEvent) {
 
                 try {
-                    int updatedPomodoro = SQLHandler.setPomodoroTime(con, userName.getText());
+                    int updatedPomodoro = SQLHandler.setPomodoroTime(con, LoginID.getUserID());
                     timerLabel.setText(updatedPomodoro + ":" + seconds_string);
                     timeLeft = (int) Double.parseDouble(timerLabel.getText());
 
@@ -202,7 +125,7 @@ public class Pomodoro extends Program {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
-                    int updatedShortBreak = SQLHandler.setShortBreakTime(con, userName.getText());
+                    int updatedShortBreak = SQLHandler.setShortBreakTime(con, LoginID.getUserID());
                     timerLabel.setText(updatedShortBreak + ":" + seconds_string);
                     timeLeft = (int) Double.parseDouble(timerLabel.getText());
                     startTimer();
@@ -217,7 +140,7 @@ public class Pomodoro extends Program {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
-                    int updatedLongBreak = SQLHandler.setLongBreakTime(con, userName.getText());
+                    int updatedLongBreak = SQLHandler.setLongBreakTime(con, LoginID.getUserID());
                     timerLabel.setText(updatedLongBreak + ":" + seconds_string);
                     timeLeft = (int) Double.parseDouble(timerLabel.getText());
 
@@ -412,7 +335,7 @@ public class Pomodoro extends Program {
 
     private void updateConsultant(int pomoChange, int sBreakChange, int lBreakChange) throws SQLException {
         Connection con = DB.getCon();
-        SQLHandler.updateConsultant(con, pomoChange, sBreakChange, lBreakChange, userName.getText());
+        SQLHandler.updateConsultant(con, pomoChange, sBreakChange, lBreakChange, LoginID.getUserID());
         con.close();
     }
     //endregion

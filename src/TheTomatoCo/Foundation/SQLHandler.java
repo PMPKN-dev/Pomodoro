@@ -250,7 +250,6 @@ public class SQLHandler {
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
-        p.close();
         return rs.getInt(1);
     }
 
@@ -268,9 +267,9 @@ public class SQLHandler {
         p.execute();
         ResultSet rs = p.getResultSet();
         rs.next();
-        p.close();
         return rs.getInt(1);
     }
+
 
     /**
      * Simple query to select the PermissionLevel for a consultant
