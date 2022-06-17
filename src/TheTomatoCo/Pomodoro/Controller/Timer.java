@@ -1,13 +1,16 @@
 package TheTomatoCo.Pomodoro.Controller;
 
 import javafx.concurrent.Task;
-
+/*
+*In order to eventually run multiple timers, a separate class was created utilizing the task functionality in javafx.
+* This class allows us to run a task in the background of the application, in this case the tasks functionality can be seen below in the call() method.
+* */
 public class Timer extends Task<Void> {
-    public void setElapsed(int elapsed) {
-        this.elapsed = elapsed;
+    public void setPomodoroTimer(int pomodoroTimer) {
+        this.PomodoroTimer = pomodoroTimer;
     }
 
-    int elapsed = 0;
+    int PomodoroTimer = 0;
     boolean isRunning = false;
 
 
@@ -15,14 +18,15 @@ public class Timer extends Task<Void> {
     public Void call() {
     isRunning = true;
 
-        while(isRunning & elapsed>0){
+        while(isRunning & PomodoroTimer >0){
             try{
                 Thread.sleep(1000);
-                elapsed--;
-                if(elapsed%60<10){
-                    updateMessage(elapsed/60+":0"+elapsed%60);
+                PomodoroTimer--;
+                if(PomodoroTimer %60<10){
+                    //In order to send the desired information back to the Pomodoro class, the updateMessage() functionality is used, in which case we take the current timer and format it in a string.
+                    updateMessage(PomodoroTimer /60+":0"+ PomodoroTimer %60);
                 }else
-                    updateMessage(elapsed/60+":"+elapsed%60);
+                    updateMessage(PomodoroTimer /60+":"+ PomodoroTimer %60);
 
 
             } catch (InterruptedException e) {

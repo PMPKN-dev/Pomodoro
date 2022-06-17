@@ -41,7 +41,6 @@ public class SQLHandler {
 
     public static int VerifyLogin(Connection con, String Password, String Username) throws SQLException{
         PreparedStatement p = con.prepareStatement("Select PermissionLevel from tbl_Login where Password = ? and ConsultantID = ?");
-        //PreparedStatement p = con.prepareStatement("Select PermissionLevel from tbl_Login where Password = ? and ConsultantID = (select ConsultantID from tbl_Consultant where ConsultantName = ?)");
         p.setString(1,Password);
         p.setString(2,Username);
         ResultSet rs = p.executeQuery();

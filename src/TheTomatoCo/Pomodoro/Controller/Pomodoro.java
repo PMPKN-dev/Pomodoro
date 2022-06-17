@@ -2,43 +2,26 @@ package TheTomatoCo.Pomodoro.Controller;
 
 import TheTomatoCo.Foundation.*;
 import TheTomatoCo.Hub.Controller.LoginData;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.TimerTask;
 
-    public class Pomodoro extends Program {
+public class Pomodoro extends Program {
     Group timerGroup = new Group();
     Group timerSettingsGroup = new Group();
 
     //region Constants
-    private TextField userName, password;
-    private Button login, pauseButton, resumeButton = new Button();
+    private Button pauseButton, resumeButton = new Button();
     private Button pomodoroTimer, shortBreakTimer, longBreakTimer;
     private HBox timerOptionsContainer;
     private Label timerLabel = new Label();
@@ -53,25 +36,25 @@ import java.util.TimerTask;
 
         try {
             setUpTimer();
+            //In order to update the label, we create a thread that runs the timer class, this starts a task in which we take the given PomodoroTimer, decrement it every second and return that to the label via the messageProperty() function.
             timerLabel.textProperty().bind(theTimer.messageProperty());
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
         setUpTimerSettings();
         super.userNameText.setText(LoginID.getUserID()+"");
-
+        //In the first two eventhandlers we handle the thread mentioned above, first button suspends the thread from running and thusly wont decrement, the later button either starts the thread if not active or resumes it.
         pauseButton.setOnAction(event -> {
             stopTimer();
         });
         resumeButton.setOnAction(event -> {
             startTimer();
         });
+        //The next three eventhandlers, we get the duration of either the pomodoro or the two break timers from the database via a query, then we assign this value to the PomodoroTimer in the timer class so the timer will count down from there.
         pomodoroTimer.setOnAction(event -> {
             try {
                 TimerType = "Pomodoro";
-                theTimer.setElapsed(SQLHandler.getPomodoroTimer(con,LoginID.getUserID(),TimerType)*60);
+                theTimer.setPomodoroTimer(SQLHandler.getPomodoroTimer(con,LoginID.getUserID(),TimerType)*60);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -79,7 +62,7 @@ import java.util.TimerTask;
         shortBreakTimer.setOnAction(event -> {
             try {
                 TimerType = "ShortBreak";
-                theTimer.setElapsed(SQLHandler.getPomodoroTimer(con,LoginID.getUserID(),TimerType)*60);
+                theTimer.setPomodoroTimer(SQLHandler.getPomodoroTimer(con,LoginID.getUserID(),TimerType)*60);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -87,13 +70,11 @@ import java.util.TimerTask;
         longBreakTimer.setOnAction(event -> {
             try {
                 TimerType = "LongBreak";
-                theTimer.setElapsed(SQLHandler.getPomodoroTimer(con,LoginID.getUserID(),TimerType)*60);
+                theTimer.setPomodoroTimer(SQLHandler.getPomodoroTimer(con,LoginID.getUserID(),TimerType)*60);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
-
-
     }
 
     private void setUpTimer() throws SQLException {
@@ -229,7 +210,6 @@ import java.util.TimerTask;
         SQLHandler.updateConsultant(con, pomoChange, sBreakChange, lBreakChange, LoginID.getUserID());
         con.close();
     }
-
     private void startTimer(){
         if(theThread.isAlive()){
             theThread.resume();
@@ -240,6 +220,4 @@ import java.util.TimerTask;
     private void stopTimer(){
         theThread.suspend();
     }
-
-
 }
