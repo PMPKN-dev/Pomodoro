@@ -106,7 +106,7 @@ public class DoToday extends Program {
             if(selectedProject.equals("All")){
                 doTodayList.getItems().clear();
                 try {
-                    ListViewFiller(doTodayList,"Select TaskName from tbl_Tasks where ConsultantID ="+LoginID.getUserID());
+                    ListViewFiller(doTodayList,"Select TaskName from tbl_Tasks where ConsultantID ='"+LoginID.getUserID()+"';");
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
