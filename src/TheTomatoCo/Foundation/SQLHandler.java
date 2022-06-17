@@ -3,6 +3,7 @@ package TheTomatoCo.Foundation;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import java.sql.*;
+import java.util.Objects;
 
 public class SQLHandler {
 
@@ -94,9 +95,6 @@ public class SQLHandler {
         p.setInt(1,pomodoroLength);
         p.setInt(2,shortBreakLength);
         p.setInt(3,longBreakLength);
-        //p.setString(1,pomodoroLength.getText());
-        //p.setString(2,shortBreakLength.getText());
-        //p.setString(3,longBreakLength.getText());
         p.setString(4,ConsultantID);
         p.executeUpdate();
         p.close();
@@ -196,6 +194,35 @@ public class SQLHandler {
         return theresult;
 
     }
+    public static int getPomodoroTimer(Connection con, String ConsultantID, String TimerType) throws SQLException{
+        int theresult = 0;
+        if(Objects.equals(TimerType, "Pomodoro")) {
+            PreparedStatement p = con.prepareStatement("select PomodoroTime  from tbl_Consultant where ConsultantID = ?");
+            p.setString(1,ConsultantID);
+            ResultSet rs = p.executeQuery();
+            rs.next();
+            theresult = rs.getInt(1);
+            p.close();
+
+        }else if(Objects.equals(TimerType, "ShortBreak")){
+            PreparedStatement p = con.prepareStatement("select PomodoroShortBreakTime  from tbl_Consultant where ConsultantID = ?");
+            p.setString(1,ConsultantID);
+            ResultSet rs = p.executeQuery();
+            rs.next();
+            theresult = rs.getInt(1);
+            p.close();
+
+        }else if(Objects.equals(TimerType, "LongBreak")){
+            PreparedStatement p = con.prepareStatement("select PomodoroLongBreakTime  from tbl_Consultant where ConsultantID = ?");
+            p.setString(1,ConsultantID);
+            ResultSet rs = p.executeQuery();
+            rs.next();
+            theresult = rs.getInt(1);
+            p.close();
+        }
+        return theresult;
+    }
+
 
     //note for future, figure out how to sub-categorize these in a proper manner
     // that manner being separable when running a command i.e.

@@ -6,6 +6,7 @@ import TheTomatoCo.Foundation.Program;
 import TheTomatoCo.Foundation.SQLHandler;
 import TheTomatoCo.Hub.Controller.Hub;
 import TheTomatoCo.Hub.Controller.LoginData;
+import TheTomatoCo.Pomodoro.Controller.Timer;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -47,12 +48,14 @@ public class Login extends Program {
 
         id = new TextField();
         id.setPromptText("Enter ID");
+        id.setText("JohnAdams01");
         id.setLayoutX(200);
         id.setLayoutY(200);
         initialScreen.getChildren().add(id);
 
         pass = new PasswordField();
         pass.setPromptText("Enter Password");
+        pass.setText("BDhp2G");
         pass.setLayoutX(200);
         pass.setLayoutY(250);
         initialScreen.getChildren().add(pass);
@@ -91,11 +94,13 @@ public class Login extends Program {
                 setUserData();
                 System.out.println("Login success");
 
+
             } else {
                 LoginErrorText.setText("Password is incorrect");
                 pass.setText("");
                 System.out.println("Login failed");
             }
+
 
         }catch (SQLException e){
             id.setText("");

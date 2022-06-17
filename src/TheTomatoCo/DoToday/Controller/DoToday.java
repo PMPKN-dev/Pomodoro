@@ -125,7 +125,7 @@ public class DoToday extends Program {
     }
     private void initialize(){
         try {
-            ListViewFiller(doTodayList,"Select TaskName from tbl_Tasks where ConsultantID ="+LoginID.getUserID());
+            ListViewFiller(doTodayList,"Select TaskName from tbl_Tasks where ConsultantID ='"+LoginID.getUserID()+"'");
         } catch (SQLException e) {
             e.printStackTrace();
         }
