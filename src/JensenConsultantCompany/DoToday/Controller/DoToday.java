@@ -36,12 +36,14 @@ public class DoToday extends Program {
      * Overrides the expand within the Program Class
      */
     public void expand() {
-        System.out.println(isSelected);
         doTodayList.setPrefHeight(370);
         sortbyProject.setPrefWidth(150);
         Grouping();
         initialize();
+        //Here we start the listener on the listview in order to see the selected item on the list.
         doTodayListListener(doTodayList);
+        //In order for the consultant to add tasks, the create task button opens up a new window where the consultant can choose the name
+        // of a task, which project it belongs under and how many pomodoros worth of time itll take to complete
         createTask.setOnAction(event -> {
 
             Stage primaryStage = new Stage();
@@ -105,21 +107,17 @@ public class DoToday extends Program {
             if(selectedProject.equals("All")){
                 doTodayList.getItems().clear();
                 try {
-                    ListViewFiller(doTodayList,"Select TaskName from tbl_Tasks where ConsultantID ="+LoginID.getUserID());
+                    ListViewFiller(doTodayList,"Select TaskName from tbl_Tasks where ConsultantID ='"+LoginID.getUserID()+"';");
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         });
-        finishTask.setOnAction(event -> {
-            if(isSelected != null){
-                System.out.println(isSelected);
-                System.out.println("ao");
-            }
-        });
 
     }
     private void initialize(){
+        //When the doToday window opens, we fill the listview with tasks based on the logged in user's tasks saved in the database,
+        // we also load the active projects from tbl_Project.
         try {
             ListViewFiller(doTodayList,"Select TaskName from tbl_Tasks where ConsultantID ='"+LoginID.getUserID()+"'");
         } catch (SQLException e) {
@@ -159,6 +157,15 @@ public class DoToday extends Program {
         getUiRoot().getChildren().addAll(doTodayView,PomodoroGroup);
 
     }
+
+    /**
+     * In order to increase reusability of code, two template methods were created below which were used to fill combobox(es) and a listview with data,
+     * done by calling said method and passing the desired combobox/listview + query to it.
+     * These methods can also be reused to partially fill those objects if more constraints are needed, such as selecting based on ProjectName etc.
+     * @param ComboBox Combobox
+     * @param query query
+     * @throws SQLException SQLException
+     */
     private void ComboBoxFiller(ComboBox ComboBox, String query) throws SQLException {
         PreparedStatement p = con.prepareStatement(query);
         ResultSet rs = p.executeQuery();
@@ -172,7 +179,13 @@ public class DoToday extends Program {
         p.close();
     }
 
-    private void ListViewFiller(ListView<String> ListView, String query) throws SQLException {
+    /**
+     * Allows us to view tasks inside a listview
+     * @param ListView Listview
+     * @param query query
+     * @throws SQLException SQLException
+     */
+    public void ListViewFiller(ListView<String> ListView, String query) throws SQLException {
         PreparedStatement p = con.prepareStatement(query);
         ResultSet rs = p.executeQuery();
         do {
@@ -185,7 +198,12 @@ public class DoToday extends Program {
         p.close();
     }
 
-        public void doTodayListListener(ListView<String> ListView){
+    /**
+     * In order to display the assigned amount of pomodoros to a task, a listener was created to observe which item in the list was selected,
+     * then run a query and update the label with the return from said query
+     * @param ListView listview
+     */
+    public void doTodayListListener(ListView<String> ListView){
             ListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 String selectedTask = doTodayList.getSelectionModel().getSelectedItem()+"";
                 System.out.println(selectedTask);

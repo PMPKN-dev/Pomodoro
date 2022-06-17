@@ -21,6 +21,9 @@ import java.sql.SQLException;
 public class Pomodoro extends Program {
     Group timerGroup = new Group();
     Group timerSettingsGroup = new Group();
+    LoginData LoginID = LoginData.getInstance();
+    Timer theTimer = new Timer();
+    Thread theThread = new Thread(theTimer);
 
     //region Constants
     private Button pauseButton, resumeButton = new Button();
@@ -30,17 +33,6 @@ public class Pomodoro extends Program {
     String TimerType = "";
     Connection con = DB.getCon();
     //endregion
-    LoginData LoginID = LoginData.getInstance();
-    Timer theTimer = new Timer();
-    Thread theThread = new Thread(theTimer);
-
-    //private boolean sound = true;
-    //private int timeLeft = 0;
-    //private int seconds = 0;
-    //private int minutes = 0;
-    //private String seconds_string = String.format("%02d", seconds);
-    //private String minutes_string = String.format("%02d", minutes);
-
 
 
     @Override
