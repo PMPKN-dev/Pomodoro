@@ -2,30 +2,21 @@ package JensenConsultantCompany.Pomodoro.Controller;
 
 import JensenConsultantCompany.Foundation.*;
 import JensenConsultantCompany.Hub.Controller.LoginData;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Pomodoro extends Program {
     Group timerGroup = new Group();
@@ -36,16 +27,20 @@ public class Pomodoro extends Program {
     private Text pomodoroTimer, shortBreakTimer, longBreakTimer;
     private HBox timerOptionsContainer;
     private Label timerLabel = new Label();
-    private Timer timer = new Timer();
-    private boolean sound = true;
-    private int timeLeft = 0;
-    private int seconds = 0;
-    private int minutes = 0;
-    private String seconds_string = String.format("%02d", seconds);
-    private String minutes_string = String.format("%02d", minutes);
+    String TimerType = "";
     Connection con = DB.getCon();
     //endregion
     LoginData LoginID = LoginData.getInstance();
+    Timer theTimer = new Timer();
+    Thread theThread = new Thread(theTimer);
+
+    //private boolean sound = true;
+    //private int timeLeft = 0;
+    //private int seconds = 0;
+    //private int minutes = 0;
+    //private String seconds_string = String.format("%02d", seconds);
+    //private String minutes_string = String.format("%02d", minutes);
+
 
 
     @Override
@@ -56,11 +51,46 @@ public class Pomodoro extends Program {
 
         try {
             setUpTimer();
+            //In order to update the label, we create a thread that runs the timer class, this starts a task in which we take the given PomodoroTimer, decrement it every second and return that to the label via the messageProperty() function.
+            timerLabel.textProperty().bind(theTimer.messageProperty());
         } catch (SQLException e) {
             e.printStackTrace();
         }
         setUpTimerSettings();
         super.userNameText.setText(LoginID.getUserID()+"");
+        //In the first two eventhandlers we handle the thread mentioned above, first button suspends the thread from running and thusly wont decrement, the later button either starts the thread if not active or resumes it.
+        pauseButton.setOnAction(event -> {
+            stopTimer();
+        });
+        resumeButton.setOnAction(event -> {
+            startTimer();
+        });
+        //The next three eventhandlers, we get the duration of either the pomodoro or the two break timers from the database via a query,
+        //then we assign this value to the PomodoroTimer in the timer class so the timer will count down from there.
+        pomodoroTimer.setOnMouseClicked(event -> {
+            try {
+                TimerType = "Pomodoro";
+                theTimer.setPomodoroTimer(SQLHandler.getPomodoroTimer(con,LoginID.getUserID(),TimerType)*60);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        shortBreakTimer.setOnMouseClicked(event -> {
+            try {
+                TimerType = "ShortBreak";
+                theTimer.setPomodoroTimer(SQLHandler.getPomodoroTimer(con,LoginID.getUserID(),TimerType)*60);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        longBreakTimer.setOnMouseClicked(event -> {
+            try {
+                TimerType = "LongBreak";
+                theTimer.setPomodoroTimer(SQLHandler.getPomodoroTimer(con,LoginID.getUserID(),TimerType)*60);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });;
     }
 
     private void setUpTimer() throws SQLException {
@@ -99,58 +129,7 @@ public class Pomodoro extends Program {
         //endregion
 
 
-        //region Switch to pomodoro timer updated through database
-        pomodoroTimer.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-
-                try {
-                    int updatedPomodoro = SQLHandler.setPomodoroTime(con, LoginID.getUserID());
-                    timerLabel.setText(updatedPomodoro + ":" + seconds_string);
-                    timeLeft = (int) Double.parseDouble(timerLabel.getText());
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        //endregion
-        //region Switch to short break timer updated through database
-        shortBreakTimer.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                try {
-                    int updatedShortBreak = SQLHandler.setShortBreakTime(con, LoginID.getUserID());
-                    timerLabel.setText(updatedShortBreak + ":" + seconds_string);
-                    timeLeft = (int) Double.parseDouble(timerLabel.getText());
-                    startTimer();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        //endregion
-        //region Switch to long break timer updated through database
-        longBreakTimer.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                try {
-                    int updatedLongBreak = SQLHandler.setLongBreakTime(con, LoginID.getUserID());
-                    timerLabel.setText(updatedLongBreak + ":" + seconds_string);
-                    timeLeft = (int) Double.parseDouble(timerLabel.getText());
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        //endregion
-
-        //then it needs to count down the seconds from 59-0 and when sec reaches 0, -1 for minute and reset to 59sec
-        //It also needs to recognize if the current timer is a break or work
-
         //region the timer itself and start/pause button
-        timerLabel.setText(minutes_string + ":" + seconds_string);
         timerLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 70));
         pauseButton = new Button();
         FXControls.setButton(pauseButton, 200, 200, "Pause");
@@ -159,69 +138,10 @@ public class Pomodoro extends Program {
         VBox vBox = new VBox(timerLabel, pauseButton, resumeButton, timerOptionsContainer);
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(20);
-
-        pauseButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                pauseTimer();
-            }
-        });
-        resumeButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                //startTimer();
-                //runTimer();
-                //formerRunTimer();
-            }
-        });
-
         timerGroup.getChildren().add(vBox);
         //endregion
     }
 
-    private void pauseTimer() {
-        timer.cancel();
-    }
-
-    private void startTimer(){
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0),e -> advanceDuration()),new KeyFrame(Duration.seconds(1)));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timerLabel.setText(timeline.toString());
-        timeline.play();
-    }
-
-    private void advanceDuration(){
-        if(seconds < 59){
-            seconds++;
-        } else{
-            seconds = 0;
-            if(minutes < 59){
-                minutes++;
-            }else{
-                minutes = 0;
-            }
-        }
-
-    }
-    private void runTimer() {
-        //this method grabs Clock class and uses it as an object
-        //the clock is used on timeLeft to make counter actually go down
-        //the timeLeft is then added to the String timerLabel
-
-        Clock clock = new Clock();
-
-        //clock.run();
-
-
-
-        //endregion
-    }
-
-    private void alarm(){
-        if(timeLeft == 0){
-            sound = true;
-        }
-    }
 
     private void setUpTimerSettings() {
         //region Input changed Pomodoro Duration
@@ -307,6 +227,17 @@ public class Pomodoro extends Program {
         Connection con = DB.getCon();
         SQLHandler.updateConsultant(con, pomoChange, sBreakChange, lBreakChange, LoginID.getUserID());
         con.close();
+    }
+
+    private void startTimer(){
+        if(theThread.isAlive()){
+            theThread.resume();
+        }else{
+            theThread.start();
+        }
+    }
+    private void stopTimer(){
+        theThread.suspend();
     }
     //endregion
 

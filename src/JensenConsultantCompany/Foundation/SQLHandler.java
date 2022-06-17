@@ -3,6 +3,7 @@ package JensenConsultantCompany.Foundation;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import java.sql.*;
+import java.util.Objects;
 
 public class SQLHandler {
 
@@ -173,9 +174,6 @@ public class SQLHandler {
         p.setInt(1,pomodoroLength);
         p.setInt(2,shortBreakLength);
         p.setInt(3,longBreakLength);
-        //p.setString(1,pomodoroLength.getText());
-        //p.setString(2,shortBreakLength.getText());
-        //p.setString(3,longBreakLength.getText());
         p.setString(4,ConsultantID);
         p.executeUpdate();
         p.close();
@@ -363,6 +361,44 @@ public class SQLHandler {
         p.close();
     }
 
+    public static String getAssignedPomodoros(Connection con, String TaskName, String ConsultantID) throws SQLException {
+        PreparedStatement p = con.prepareStatement("select AssignedPomodoros from tbl_Tasks where TaskName = ? and ConsultantID = ?;");
+        p.setString(1, TaskName);
+        p.setString(2, ConsultantID);
+        ResultSet rs = p.executeQuery();
+        rs.next();
+        String theresult = rs.getString(1);
+        p.close();
+        return theresult;
+    }
+    public static int getPomodoroTimer(Connection con, String ConsultantID, String TimerType) throws SQLException{
+        int theresult = 0;
+        if(Objects.equals(TimerType, "Pomodoro")) {
+            PreparedStatement p = con.prepareStatement("select PomodoroTime  from tbl_Consultant where ConsultantID = ?");
+            p.setString(1,ConsultantID);
+            ResultSet rs = p.executeQuery();
+            rs.next();
+            theresult = rs.getInt(1);
+            p.close();
+
+        }else if(Objects.equals(TimerType, "ShortBreak")){
+            PreparedStatement p = con.prepareStatement("select PomodoroShortBreakTime  from tbl_Consultant where ConsultantID = ?");
+            p.setString(1,ConsultantID);
+            ResultSet rs = p.executeQuery();
+            rs.next();
+            theresult = rs.getInt(1);
+            p.close();
+
+        }else if(Objects.equals(TimerType, "LongBreak")){
+            PreparedStatement p = con.prepareStatement("select PomodoroLongBreakTime  from tbl_Consultant where ConsultantID = ?");
+            p.setString(1,ConsultantID);
+            ResultSet rs = p.executeQuery();
+            rs.next();
+            theresult = rs.getInt(1);
+            p.close();
+        }
+        return theresult;
+    }
     /**
      * Returns a String Array with all the data about the Consultant<br>
      * Outputs data in following indexing: <br>
@@ -462,15 +498,6 @@ public class SQLHandler {
      */
     public static String checkName(String ID) throws SQLException{
         PreparedStatement p = DB.getCon().prepareStatement("SELECT ConsultantID FROM tbl_Consultant WHERE ConsultantID=?");
-        p.setString(1,ID);
-        p.execute();
-        ResultSet rs = p.getResultSet();
-        rs.next();
-        p.close();
-        return ID;
-    }
-    public static String checkLogin(String ID) throws SQLException{
-        PreparedStatement p = DB.getCon().prepareStatement("SELECT ConsultantID FROM tbl_Login WHERE ConsultantID =?");
         p.setString(1,ID);
         p.execute();
         ResultSet rs = p.getResultSet();

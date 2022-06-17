@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
@@ -25,15 +26,22 @@ public class DoToday extends Program {
     ListView doTodayList = new ListView<>();
     LoginData LoginID = LoginData.getInstance();
     ComboBox sortbyProject = new ComboBox();
+    Text AssignedPomodorosNumber = new Text();
+    Text CompletedPomodorosNumber = new Text();
+    Button finishTask = new Button();
+    Boolean isSelected = doTodayList.getSelectionModel().isEmpty();
 
     @Override
     /**
      * Overrides the expand within the Program Class
      */
     public void expand() {
+        System.out.println(isSelected);
         doTodayList.setPrefHeight(370);
+        sortbyProject.setPrefWidth(150);
         Grouping();
         initialize();
+        doTodayListListener(doTodayList);
         createTask.setOnAction(event -> {
 
             Stage primaryStage = new Stage();
@@ -90,7 +98,7 @@ public class DoToday extends Program {
             String selectedProject = sortbyProject.getSelectionModel().getSelectedItem()+"";
             doTodayList.getItems().clear();
             try {
-                ListViewFiller(doTodayList,"select TaskName from tbl_Tasks where ProjectID = (select ProjectID from tbl_Project where ProjectName = '"+selectedProject+"');");
+                ListViewFiller(doTodayList,"select TaskName from tbl_Tasks where ProjectID = (select ProjectID from tbl_Project where ProjectName = '"+selectedProject+"') and ConsultantID = '"+LoginID.getUserID()+"'");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -103,11 +111,17 @@ public class DoToday extends Program {
                 }
             }
         });
+        finishTask.setOnAction(event -> {
+            if(isSelected != null){
+                System.out.println(isSelected);
+                System.out.println("ao");
+            }
+        });
 
     }
     private void initialize(){
         try {
-            ListViewFiller(doTodayList,"Select TaskName from tbl_Tasks where ConsultantID ="+LoginID.getUserID());
+            ListViewFiller(doTodayList,"Select TaskName from tbl_Tasks where ConsultantID ='"+LoginID.getUserID()+"'");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -122,19 +136,27 @@ public class DoToday extends Program {
     private void Grouping() {
         HBox listSort = new HBox();
         HBox createFinish = new HBox();
+        HBox PomodoroGroup = new HBox();
         VBox doTodayView = new VBox();
+        VBox textfields = new VBox();
+        VBox fieldNumbers = new VBox();
 
 
+        Text AssignedPomodoros = new Text("Assigned Pomodoros :");
         sortbyProject.setPromptText("Sort by Project");
-        Button finishTask = new Button();
         finishTask.setText("Finish task");
         createTask.setText("Create new task");
 
 
+        fieldNumbers.getChildren().addAll(AssignedPomodorosNumber, CompletedPomodorosNumber);
+        textfields.getChildren().addAll(AssignedPomodoros);
+        PomodoroGroup.getChildren().addAll(textfields,fieldNumbers);
+        PomodoroGroup.setLayoutX(405);
+        PomodoroGroup.setLayoutY(90);
         listSort.getChildren().addAll(doTodayList,sortbyProject);
         createFinish.getChildren().addAll(createTask,finishTask);
         doTodayView.getChildren().addAll(listSort,createFinish);
-        getUiRoot().getChildren().add(doTodayView);
+        getUiRoot().getChildren().addAll(doTodayView,PomodoroGroup);
 
     }
     private void ComboBoxFiller(ComboBox ComboBox, String query) throws SQLException {
@@ -153,15 +175,29 @@ public class DoToday extends Program {
     private void ListViewFiller(ListView<String> ListView, String query) throws SQLException {
         PreparedStatement p = con.prepareStatement(query);
         ResultSet rs = p.executeQuery();
-        do{
-            if(!rs.next()){
+        do {
+            if (!rs.next()) {
                 break;
-            }else{
+            } else {
                 ListView.getItems().add(rs.getString(1));
             }
-        }while(true);
+        } while (true);
         p.close();
+    }
 
+        public void doTodayListListener(ListView<String> ListView){
+            ListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                String selectedTask = doTodayList.getSelectionModel().getSelectedItem()+"";
+                System.out.println(selectedTask);
+                try {
+                    AssignedPomodorosNumber.setText(SQLHandler.getAssignedPomodoros(con,selectedTask,LoginID.getUserID()));
+                    System.out.println(isSelected);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+
+            });
     }
 }
 
