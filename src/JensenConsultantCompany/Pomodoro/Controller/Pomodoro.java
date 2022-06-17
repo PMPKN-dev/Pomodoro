@@ -134,7 +134,6 @@ public class Pomodoro extends Program {
         //endregion
     }
 
-
     private void setUpTimerSettings() {
         //region Input changed Pomodoro Duration
         TextField pomodoroDurationChange = new TextField();
@@ -206,11 +205,9 @@ public class Pomodoro extends Program {
         removeGroup(currentGroup);
         loadGroup(targetGroup);
     }
-
     private void removeGroup(Group group) {
         getUiRoot().getChildren().removeAll(group);
     }
-
     private void loadGroup(Group group) {
         getUiRoot().getChildren().addAll(group);
     }

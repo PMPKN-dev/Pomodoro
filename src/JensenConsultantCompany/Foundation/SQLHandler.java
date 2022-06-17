@@ -371,6 +371,15 @@ public class SQLHandler {
         p.close();
         return theresult;
     }
+
+    /**
+     * Grabs the timers in database
+     * @param con
+     * @param ConsultantID
+     * @param TimerType
+     * @return
+     * @throws SQLException
+     */
     public static int getPomodoroTimer(Connection con, String ConsultantID, String TimerType) throws SQLException{
         int theresult = 0;
         if(Objects.equals(TimerType, "Pomodoro")) {
