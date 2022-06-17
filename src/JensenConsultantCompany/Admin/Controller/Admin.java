@@ -254,6 +254,7 @@ public class Admin extends Program {
         //region PomodoroTime TextField
         TextField PomodoroTime = new TextField();
         FXControls.under(PomodoroTime,Name,spacing);
+        PomodoroTime.setPromptText("Pomodoro Time");
 
         PomodoroTime.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) { //takes the vale of the field and if it is not a Decimal Integer ->
@@ -268,6 +269,7 @@ public class Admin extends Program {
         //region shortBreakTime TextField
         TextField shortBreakTime = new TextField();
         FXControls.under(shortBreakTime,PomodoroTime,spacing);
+        shortBreakTime.setPromptText("Short Break Time");
 
         shortBreakTime.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) { //takes the vale of the field and if it is not a Decimal Integer ->
@@ -282,6 +284,7 @@ public class Admin extends Program {
         //region longBreakTime TextField
         TextField longBreakTime = new TextField();
         FXControls.under(longBreakTime,shortBreakTime,spacing);
+        longBreakTime.setPromptText("Long Break Time");
 
         longBreakTime.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) { //takes the vale of the field and if it is not a Decimal Integer ->

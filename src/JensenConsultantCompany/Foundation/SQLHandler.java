@@ -453,8 +453,24 @@ public class SQLHandler {
         p.close();
     }
 
+    /**
+     * Used for unit testing, simply grabs the ConsultantID if it exists
+     * "SELECT ConsultantID FROM tbl_Consultant WHERE ConsultantID = ID"
+     * @param ID The unique ConsultantID
+     * @return Returns ConsultantID
+     * @throws SQLException SQLException
+     */
     public static String checkName(String ID) throws SQLException{
         PreparedStatement p = DB.getCon().prepareStatement("SELECT ConsultantID FROM tbl_Consultant WHERE ConsultantID=?");
+        p.setString(1,ID);
+        p.execute();
+        ResultSet rs = p.getResultSet();
+        rs.next();
+        p.close();
+        return ID;
+    }
+    public static String checkLogin(String ID) throws SQLException{
+        PreparedStatement p = DB.getCon().prepareStatement("SELECT ConsultantID FROM tbl_Login WHERE ConsultantID =?");
         p.setString(1,ID);
         p.execute();
         ResultSet rs = p.getResultSet();

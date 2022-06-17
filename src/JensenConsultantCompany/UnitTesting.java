@@ -32,15 +32,16 @@ public class UnitTesting {
     }
 
     @Test
-    public void test1() throws SQLException {
+    public void testCreateConsultant() throws SQLException {
         System.out.println("Testing if we can create new consultant");
         Connection con = DB.getCon();
-        SQLHandler.createConsultant(con,"TestGuy01","Test Guy",60,10,40);
+        SQLHandler.createConsultant(con,"TestGuy03","Test Guy",60,10,40);
 
-        String expected = "TestGuy01";
-        String actual = SQLHandler.checkName("TestGuy01");
+        String expected = "TestGuy03";
+        String actual = SQLHandler.checkName("TestGuy03");
         assertEquals(expected,actual);
 
     }
-    
+
+
 }
